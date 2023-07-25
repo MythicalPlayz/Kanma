@@ -1,0 +1,9 @@
+{
+    "name": "Screen 2",
+    "width": 4,
+    "capacity": 8,
+    "seat_layout": [
+        [4],
+        [4]
+    ]
+}

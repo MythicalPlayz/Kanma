@@ -1,1 +1,6 @@
-database/bookings
+database/bookings/*
+node_modules
+database/movies/*
+database/screens/*
+!database/movies/example.json
+!database/screens/example.json

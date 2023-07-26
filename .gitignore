@@ -2,4 +2,5 @@
 /database/bookings/*
 /database/movies/*
 /database/screens/*
+/database/admin/*
 !example.json

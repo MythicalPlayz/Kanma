@@ -19,9 +19,11 @@ app.get("/", (req, res) => {
 const routes = {
   'movies': require('./movies.js'),
   'screens': require('./screen.js'),
-  'book': require('./book.js')
+  'book': require('./book.js'),
+  'admin': require('./admin.js')
 }
 
 app.use('/movies',routes.movies);
 app.use('/screens',routes.screens);
 app.use('/book',routes.book)
+app.use('/admin',routes.admin)

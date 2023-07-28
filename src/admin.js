@@ -3,15 +3,14 @@ const fs = require('fs');
 const router = new Router();
 router.get('/', async (request, response) => {
 	if (isLoggedIn(request,response))
-	response.redirect(request.originalUrl + 'home')
-
+	response.redirect('/admin/home')
 });
 
 router.get('/login', async (request, response) => {
 	if (!isLoggedIn(request,response))
 	response.sendFile(__dirname.replace('\src',"") + '/views/admin/login.html')
 	else
-	response.redirect(request.originalUrl.match('login') ? request.originalUrl.replace('login','home') : request.originalUrl  + 'home')
+	response.redirect('/admin/home')
 });
 router.get('/admins', async (request, response) => {
 	response.json(getAdmins())
@@ -60,17 +59,44 @@ function loginUser(admins,username,password){
     return false
 }
 
-function isLoggedIn(request,response){
+function isLoggedIn(request,response,preventRedirect){
 	const cookies = request.headers.cookie
 	if (cookies === undefined){
-	response.redirect(request.originalUrl.match('login') ? request.originalUrl : request.originalUrl  + 'login')
+		if (!request.originalUrl.match('login') && !preventRedirect)
+			response.redirect('/admin/login')
 	return false
 	} else {
 	const cookiesTable = cookies.split(';')
 	if (!getLoginInfo(cookiesTable)){
-	response.redirect(request.originalUrl.match('login') ? request.originalUrl : request.originalUrl  + 'login')
+		if (!request.originalUrl.match('login') && !preventRedirect)
+			response.redirect('/admin/login')
 	return false
 	}
 	return true
 	}
 }
+
+router.get('/database/drop', async (request, response) => {
+    if (!isLoggedIn(request,response,true))
+		response.send('No Admin ?')
+	else {
+	removeBookings()
+    response.send('DONE')
+	}
+})
+
+function removeBookings() {
+    let bookings = fs.readdirSync('./database/bookings')
+    bookings.forEach(file => {
+        if (file !== "example.json") {
+            	fs.unlink(`./database/bookings/${file}`, (err) => {
+				if (err) {
+				  console.error('Error deleting the file:', err);
+				} else {
+				  console.log('File deleted successfully.');
+				}
+			})
+        }
+    })
+}
+

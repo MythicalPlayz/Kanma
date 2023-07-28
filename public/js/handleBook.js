@@ -43,7 +43,7 @@ bookButton.addEventListener('click', (event) => {
     }
     if (bookseats.length === 0) return
     postRquest(movie,time,screen,bookseats)
-    updateFun({movie,time,screen,bookseats})
+    updateFun({movie,time,screen,bookseats,"type": "add"})
     setupBooked()
 })
 

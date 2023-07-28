@@ -37,3 +37,21 @@ function loginUser(admins,input){
     }
     return false
 }
+
+// Add an event listener to the input field to detect key presses
+passwordElement.addEventListener('keyup', function(event) {
+    // Check if the key pressed is the Enter key (key code 13)
+    if (event.key === "Enter") {
+      // Trigger the button click
+      loginButton.click();
+    }
+  });
+
+  // Add an event listener to the input field to detect key presses
+usernameElement.addEventListener('keyup', function(event) {
+    // Check if the key pressed is the Enter key (key code 13)
+    if (event.key === "Enter") {
+      // Trigger the button click
+      passwordElement.focus()
+    }
+  });

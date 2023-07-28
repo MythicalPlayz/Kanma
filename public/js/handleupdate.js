@@ -7,6 +7,8 @@ socket.onopen = () => {
 
 socket.onmessage = (event) => {
   let data = JSON.parse(event.data)
+  if (data.type === 'add'){
+    if (window.location.href.match('admin')) return
   let movie = document.getElementById('movie').value
   let time = document.getElementById("time").value
   let screen = document.getElementById('screen').value
@@ -17,7 +19,16 @@ socket.onmessage = (event) => {
     mainseat.children[0].innerHTML = "X"
     mainseat.children[0].classList.add("booked")
     mainseat.children[0].classList.remove("prebook")
-}
+    }
+  }
+  else if (data.type === 'reset'){
+    for (let seat of document.getElementsByClassName('seat')){
+      if (seat.id === '') continue
+    seat.children[0].innerHTML = seat.id
+    seat.children[0].classList.remove("booked")
+    seat.children[0].classList.remove("prebook")
+    }
+  }
 };
 
 socket.onerror = (error) => {

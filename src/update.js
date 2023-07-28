@@ -26,7 +26,7 @@ function createWebSocketServer(server) {
     // Handle incoming messages from the client
     connection.on('message', function (message) {
       message = JSON.parse(message)
-      console.log(`Received message from client ${userId}: ${message}`);
+      console.log(`Received message from client ${userId}: ${JSON.stringify(message)}`);
       // You can process the received message here and send back responses if needed.
       sendNewSeats(message,clients)
     });

@@ -16,6 +16,21 @@ router.get('/admins', async (request, response) => {
 	response.json(getAdmins())
 });
 
+router.get('/add', async (request, response) => {
+	if (isLoggedIn(request,response))
+	response.sendFile(__dirname.replace('\src',"") + '/views/admin/add.html')
+});
+
+router.get('/remove', async (request, response) => {
+	if (isLoggedIn(request,response))
+	response.sendFile(__dirname.replace('\src',"") + '/views/admin/remove.html')
+});
+
+router.get('/edit', async (request, response) => {
+	if (isLoggedIn(request,response))
+	response.sendFile(__dirname.replace('\src',"") + '/views/admin/edit.html')
+});
+
 router.get('/home', async (request, response) => {
 	if (isLoggedIn(request,response))
 	response.sendFile(__dirname.replace('\src',"") + '/views/admin/home.html')

@@ -1,20 +1,35 @@
-const addButton = document.getElementById('add')
-const removeButton = document.getElementById('remove')
-const editButton = document.getElementById('edit')
+const addMovieButton = document.getElementById('add-movie')
+const removeMovieButton = document.getElementById('remove-movie')
+const editMovieButton = document.getElementById('edit-movie')
+const addScreenButton = document.getElementById('add-screen')
+const removeScreenButton = document.getElementById('remove-screen')
+const editScreenButton = document.getElementById('edit-screen')
 const databaseButton = document.getElementById('database')
 const url = window.location.origin
 import updateFun  from "../handleupdate.js"
 
-addButton.addEventListener('click',function(){
-    window.location.replace('/admin/add')
+addMovieButton.addEventListener('click',function(){
+    window.location.replace('/admin/movies/add')
 })
 
-removeButton.addEventListener('click',function(){
-    window.location.replace('/admin/remove')
+removeMovieButton.addEventListener('click',function(){
+    window.location.replace('/admin/movies/remove')
 })
 
-editButton.addEventListener('click',function(){
-    window.location.replace('/admin/edit')
+editMovieButton.addEventListener('click',function(){
+    window.location.replace('/admin/movies/edit')
+})
+
+addScreenButton.addEventListener('click',function(){
+    window.location.replace('/admin/screens/add')
+})
+
+removeScreenButton.addEventListener('click',function(){
+    window.location.replace('/admin/screens/remove')
+})
+
+editScreenButton.addEventListener('click',function(){
+    window.location.replace('/admin/screens/edit')
 })
 
 databaseButton.addEventListener('click',async function(){
@@ -27,3 +42,11 @@ databaseButton.addEventListener('click',async function(){
     else
     console.error('Error')
 })
+function setupName(inputString) {
+const index = inputString.indexOf('logininfo');
+const info = inputString.substring(index).split(';')[0].split("=")[1];
+const username = JSON.parse(info).username
+document.getElementById('user').innerHTML = `Welcome, ${username}`
+}
+
+setupName(document.cookie)

@@ -45,8 +45,8 @@ const movieDropDown = document.getElementById('movie')
 const timeDropDown = document.getElementById("time")
 const screenDropDown = document.getElementById('screen')
 
-const url =  window.location.href
-let movies = await get(`${url}movies`)
+const url =  window.location.origin
+let movies = await get(`${url}/movies`)
 changeCover(movies[0].cover_url)
 makeOptionTimeAndScreen(movies[0])
 let x = 0

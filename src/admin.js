@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const fs = require('fs');
 const router = new Router();
+const bodyParser = require('body-parser')
 router.get('/', async (request, response) => {
 	if (isLoggedIn(request,response))
 	response.redirect('/admin/home')
@@ -16,19 +17,34 @@ router.get('/admins', async (request, response) => {
 	response.json(getAdmins())
 });
 
-router.get('/add', async (request, response) => {
+router.get('/movies/add', async (request, response) => {
 	if (isLoggedIn(request,response))
-	response.sendFile(__dirname.replace('\src',"") + '/views/admin/add.html')
+	response.sendFile(__dirname.replace('\src',"") + '/views/admin/add-movie.html')
 });
 
-router.get('/remove', async (request, response) => {
+router.get('/movies/remove', async (request, response) => {
 	if (isLoggedIn(request,response))
-	response.sendFile(__dirname.replace('\src',"") + '/views/admin/remove.html')
+	response.sendFile(__dirname.replace('\src',"") + '/views/admin/remove-movie.html')
 });
 
-router.get('/edit', async (request, response) => {
+router.get('/movies/edit', async (request, response) => {
 	if (isLoggedIn(request,response))
-	response.sendFile(__dirname.replace('\src',"") + '/views/admin/edit.html')
+	response.sendFile(__dirname.replace('\src',"") + '/views/admin/edit-movie.html')
+});
+
+router.get('/screens/add', async (request, response) => {
+	if (isLoggedIn(request,response))
+	response.sendFile(__dirname.replace('\src',"") + '/views/admin/add-screen.html')
+});
+
+router.get('/screens/remove', async (request, response) => {
+	if (isLoggedIn(request,response))
+	response.sendFile(__dirname.replace('\src',"") + '/views/admin/remove-screen.html')
+});
+
+router.get('/screens/edit', async (request, response) => {
+	if (isLoggedIn(request,response))
+	response.sendFile(__dirname.replace('\src',"") + '/views/admin/edit-screen.html')
 });
 
 router.get('/home', async (request, response) => {
@@ -36,6 +52,24 @@ router.get('/home', async (request, response) => {
 	response.sendFile(__dirname.replace('\src',"") + '/views/admin/home.html')
 
 });
+
+router.post('/movies/add',bodyParser.json(), async (request, response) => {
+    let infoData = request.body.info;
+	let loginInfo = request.body.loginInfo
+	if (loginInfo === null){return response.status(401) }
+	if (loginUser(getAdmins(),loginInfo.username,loginInfo.password))
+    	{
+			let data = {
+				"name": infoData.generalInfo[1],
+    			"rating": infoData.generalInfo[0],
+    			"screens": infoData.screens,
+				"time": infoData.times,
+    			"cover_url": infoData.generalInfo[3],
+    			"value": infoData.generalInfo[2]
+			}
+			fs.writeFileSync(`./database/movies/${infoData.generalInfo[2]}.json`,JSON.stringify(data))
+		}
+})
 
 module.exports = router
 

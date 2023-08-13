@@ -1,10 +1,10 @@
-const url = window.location.href
+const url = window.location.origin
 const movieDropDown = document.getElementById('movie')
 const timeDropDown = document.getElementById("time")
 const screenDropDown = document.getElementById('screen')
 import updateFun  from "./handleupdate.js"
 async function postRquest(movie,time,screen,seats){
-   var res = await fetch(`${url}book/${movie}/${time}/${screen}`, {
+   var res = await fetch(`${url}/book/${movie}/${time}/${screen}`, {
         method: 'POST',
         body: JSON.stringify({
             seats: seats

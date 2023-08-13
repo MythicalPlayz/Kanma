@@ -1,4 +1,4 @@
-const url = window.location.href
+const url = window.location.origin
 
 const get = async function getRequest(link) {
     const req = await fetch(link)
@@ -17,7 +17,7 @@ async function changeScreen() {
     await delay(100) //wait until new value of screen
     clearSeats()
     let screenName = screenDropDown.value
-    let screen = await get(`${url}screens/${screenName}`)
+    let screen = await get(`${url}/screens/${screenName}`)
     screen = screen[0]
     let rows = screen.seat_layout
     let width = screen.width

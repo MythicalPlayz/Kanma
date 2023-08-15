@@ -61,13 +61,14 @@ for (const movie of movies){
 }
 }
 await setup()
+if (!location.href.includes('admin')) {
 movieDropDown.addEventListener('change',function() {
     const value = movieDropDown.value
     changeCover(movies[valueToIndex[value]].cover_url)
     eraseDropDown()
     makeOptionTimeAndScreen(movies[valueToIndex[value]])
 })
-
+}
 
 
 async function clearDropdowns(){

@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <title>Admin Panel</title>
+    </head>
+    <body>
+        <div class="title"> <button id="back" class="back">Back</button>Editing A Movie</div>
+        <div class="movies-table"><button class="movie-cover"><img src="https://m.media-amazon.com/images/M/MV5BMzI0NmVkMjEtYmY4MS00ZDMxLTlkZmEtMzU4MDQxYTMzMjU2XkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg"></button>
+            <button class="movie-cover"><img src="https://m.media-amazon.com/images/M/MV5BMzI0NmVkMjEtYmY4MS00ZDMxLTlkZmEtMzU4MDQxYTMzMjU2XkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg"></button>
+            <button class="movie-cover"><img src="https://m.media-amazon.com/images/M/MV5BMzI0NmVkMjEtYmY4MS00ZDMxLTlkZmEtMzU4MDQxYTMzMjU2XkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg"></button>
+            <button class="movie-cover"><img src="https://m.media-amazon.com/images/M/MV5BMzI0NmVkMjEtYmY4MS00ZDMxLTlkZmEtMzU4MDQxYTMzMjU2XkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg"></button>
+            <button class="movie-cover"><img src="https://m.media-amazon.com/images/M/MV5BMzI0NmVkMjEtYmY4MS00ZDMxLTlkZmEtMzU4MDQxYTMzMjU2XkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg"></button>
+            <button class="movie-cover"><img src="https://m.media-amazon.com/images/M/MV5BMzI0NmVkMjEtYmY4MS00ZDMxLTlkZmEtMzU4MDQxYTMzMjU2XkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg"></button>
+            <button class="movie-cover"><img src="https://m.media-amazon.com/images/M/MV5BMzI0NmVkMjEtYmY4MS00ZDMxLTlkZmEtMzU4MDQxYTMzMjU2XkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg"></button>
+            <button class="movie-cover"><img src="https://m.media-amazon.com/images/M/MV5BMzI0NmVkMjEtYmY4MS00ZDMxLTlkZmEtMzU4MDQxYTMzMjU2XkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg"></button>
+            <button class="movie-cover"><img src="https://m.media-amazon.com/images/M/MV5BMzI0NmVkMjEtYmY4MS00ZDMxLTlkZmEtMzU4MDQxYTMzMjU2XkEyXkFqcGdeQXVyMzQ0MzA0NTM@._V1_.jpg"></button>
+
+        </div>
+        <div class="selected off">
+        <div class="main">
+            <div class="sub">
+                Name: <div id="name"></div>
+            </div>
+            <div class="sub">
+                CodeName: <input id="code" type="text">
+            </div>
+            <div class="sub">
+                Rating:
+                <select id="rating">
+                    <option value="G">G</option>
+                    <option value="8+">8+</option>
+                    <option value="12+">12+</option>
+                    <option value="16+">16+</option>
+                    <option value="18+">18+</option>
+                </select>
+            </div>
+            <div class="sub table" id="screen">
+                Screens:     
+            </div>
+            <div class="sub grid" id="time">
+                Time: <input id="number" type="number" placeholder="1"> <input class="time" type="time">
+            </div>
+            <div class="sub">
+                Cover URL: <input id="cover-url" type="url">
+            </div>
+            <div class="sub">
+                Cover Preview:
+            </div>
+            <div class="cover-art">
+                <img id="cover" class="cover">
+            </div>
+            <button id="save" class="save">Save</button>
+        </div>
+    </div>
+    </body>
+    <script src="/js/admin/handleback.js" type="module"></script>
+    <script src="/js/admin/handleMovie.js" type="module"></script>
+    <script src="/js/handleMovies.js" type="module"></script>
+    <script src="/js/handleupdate.js" type="module"></script>
+    <link rel="stylesheet" href="/css/movie.css">
+</html>

@@ -135,3 +135,23 @@ img {
 .time {
     margin-top: 10px;
 }
+
+.off {
+    display: none;
+}
+
+.movies-table {
+    display: flex;
+    flex-wrap: wrap;
+    width: 95%;
+    margin-right: 2.5%;
+    margin-left: 2.5%;
+}
+
+.movie-cover {
+    width: 10%;
+    height: 10%;
+    border: 0px;
+    margin: 10px;
+    margin-right: 0px;
+}

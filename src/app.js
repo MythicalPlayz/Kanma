@@ -20,10 +20,12 @@ const routes = {
   'movies': require('./movies.js'),
   'screens': require('./screen.js'),
   'book': require('./book.js'),
-  'admin': require('./admin.js')
+  'admin': require('./admin.js'),
+  'staff': require('./staff.js')
 }
 
 app.use('/movies',routes.movies);
 app.use('/screens',routes.screens);
 app.use('/book',routes.book)
 app.use('/admin',routes.admin)
+app.use('/staff',routes.staff)

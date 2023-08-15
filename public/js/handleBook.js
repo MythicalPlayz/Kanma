@@ -23,11 +23,11 @@ async function getRequest(link) {
         return null
 }
 
-function getURL(){
+async function getURL(){
     var movie = document.getElementById('movie').value
     var time = document.getElementById("time").value
     var screen = document.getElementById('screen').value
-    return `${url}book/${movie}/${time}/${screen}`
+    return `${url}/book/${movie}/${time}/${screen}`
 }
 
 const bookButton = document.getElementById('bookbtn')
@@ -52,10 +52,10 @@ function delay(time) {
 }
 
 async function setupBooked(){
-    var data = await getRequest(getURL())
+    var data = await getRequest(await getURL())
     if (data.seatdata === undefined) return
     var seatdata = data.seatdata
-    await delay(250)
+    await delay(600)
     for (var seat of seatdata){
         var mainseat = document.getElementById(seat)
         mainseat.children[0].innerHTML = "X"

@@ -1,11 +1,11 @@
 // Client-side (Browser)
 const socket = new WebSocket(window.location.href.replace('http','ws'));
-
+import refreshMovies from './handleMovies.js';
 socket.onopen = () => {
   
 };
 
-socket.onmessage = (event) => {
+socket.onmessage = async (event) => {
   let data = JSON.parse(event.data)
   if (data.type === 'add'){
     if (window.location.href.match('admin')) return
@@ -29,6 +29,8 @@ socket.onmessage = (event) => {
     seat.children[0].classList.remove("prebook")
     }
   }
+  else if (data.type === "refresh")
+    await refreshMovies()
 };
 
 socket.onerror = (error) => {
@@ -41,4 +43,8 @@ socket.onclose = () => {
 export default function sendSeatData(seatData){
  socket.send(JSON.stringify(seatData))
  return
+}
+export function updateMovies(){
+  socket.send(JSON.stringify({"type": 'refresh'}))
+  return
 }

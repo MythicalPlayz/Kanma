@@ -44,9 +44,11 @@ function changeCover(url){
 const movieDropDown = document.getElementById('movie')
 const timeDropDown = document.getElementById("time")
 const screenDropDown = document.getElementById('screen')
-
+var movies
+async function setup(){
 const url =  window.location.origin
-let movies = await get(`${url}/movies`)
+movies = await get(`${url}/movies`)
+if (!location.href.includes('admin')){
 changeCover(movies[0].cover_url)
 makeOptionTimeAndScreen(movies[0])
 let x = 0
@@ -56,9 +58,26 @@ for (const movie of movies){
     x++
 }
 
+}
+}
+await setup()
 movieDropDown.addEventListener('change',function() {
     const value = movieDropDown.value
     changeCover(movies[valueToIndex[value]].cover_url)
     eraseDropDown()
     makeOptionTimeAndScreen(movies[valueToIndex[value]])
 })
+
+
+
+async function clearDropdowns(){
+    movieDropDown.innerHTML = ''
+    timeDropDown.innerHTML = ''
+    screenDropDown.innerHTML = ''
+}
+export default async function refreshMovies(){
+    if (location.href.includes('admin')) return
+    alert('Movie Updated')
+    await clearDropdowns()
+    await setup()
+}

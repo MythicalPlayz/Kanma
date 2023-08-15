@@ -1,3 +1,5 @@
+import {updateMovies}  from "../handleupdate.js"
+
 async function getRequest(link){
     const req = await fetch(link)
     if (req.status === 200) 
@@ -91,7 +93,16 @@ submitButton.addEventListener('click',() => {
    if (screens === null) return
    let generalInfo = getRemainingInfo()
    if (generalInfo === null) return
+   if (location.href.includes("add")) {
    postRquest({generalInfo,times,screens},'add')
+   alert("Movie Added")
+   }
+   else if (location.href.includes("edit")) {
+    postRquest({generalInfo,times,screens}, 'edit')
+    alert("Movie Edited")
+   }
+   updateMovies()
+   location.replace('/admin/home')
 })
 
 function handleTimes(){

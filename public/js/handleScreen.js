@@ -14,7 +14,7 @@ const screenDropDown = document.getElementById('screen')
 const mainHall = document.getElementById("cinema")
 
 async function changeScreen() {
-    await delay(100) //wait until new value of screen
+    await delay(500) //wait until new value of screen
     clearSeats()
     let screenName = screenDropDown.value
     let screen = await get(`${url}/screens/${screenName}`)

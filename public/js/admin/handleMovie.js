@@ -66,6 +66,10 @@ const timeLabel = document.getElementsByClassName('time')[0]
 const timeAmount = document.getElementById('number')
 
 timeAmount.addEventListener('change',() => {
+   changeValueOfTime()
+})
+
+function changeValueOfTime(){
     let value = timeAmount.value
     value = Math.abs(value)
     if (value > 0 && value <= MaxTime) {
@@ -82,7 +86,7 @@ timeAmount.addEventListener('change',() => {
             }
         }
     }
-})
+}
 
 const submitButton = document.getElementById('save')
 
@@ -164,4 +168,81 @@ function getRemainingInfo(){
         return null
     }
     return [rating,name,codename,cover]
+}
+
+async function createMovies(){
+    var movies = await getRequest(`${url}/movies`)
+    var moviesToIndex = {}
+    const movieFrame = document.getElementById('movies-table')
+    let x = 0
+    for (var movie of movies){
+        var button = document.createElement('button')
+        movieFrame.appendChild(button)
+        button.classList.add('movie-cover')
+        button.id = movie.value
+        moviesToIndex[movie.value] = x
+        x++
+        var img = document.createElement('img')
+        button.appendChild(img)
+        img.src = movie.cover_url
+        button.addEventListener('click',function(){
+            const id = this.id
+        if (location.href.includes('edit')){
+            const movie2 = movies[moviesToIndex[id]]
+            editMovie(movie2)
+        }
+        })
+    }
+}
+
+if (location.href.includes('edit') || location.href.includes('remove'))
+    createMovies()
+
+function editMovie(movie){
+    var table = document.getElementById('movies-table')
+    table.classList.add("off")
+    var selected = document.getElementById('selected')
+    selected.classList.remove('off')
+    console.log(movie)
+    var rating = document.getElementById('rating')
+    rating.value = movie.rating
+    var name = document.getElementById('name')
+    name.value = movie.name
+    var code = document.getElementById('code')
+    code.innerHTML = movie.value
+    var curl = document.getElementById("cover-url")
+    curl.value = movie.cover_url
+    let url = coverUrlElement.value
+    coverElement.src = url
+    isUrlValid = true
+    for (var x of movie.screens)
+       document.getElementById(x).getElementsByClassName('check')[0].checked = true
+    var timeAmount = document.getElementById("number")
+    timeAmount.value = movie.time.length
+    changeValueOfTime()
+    let timesElement = document.getElementsByClassName('time')
+    let times = movie.time
+    let moviePosition = 0
+    for (let timeElement of timesElement){
+        timeElement.value = jsonToTimeValue(times[moviePosition])
+        moviePosition++;
+    }
+}
+
+function jsonToTimeValue(otime){
+    let hour = parseInt(otime.split(":")[0])
+    let time = ""
+    if (otime.startsWith('12') && otime.includes('AM')){
+        time = '00'
+        time += `:${otime.split(":")[1]}`
+    }
+    else if (otime.includes('PM')){
+        time = (hour !== 12) ? hour + 12 : hour
+        time += `:${otime.split(":")[1]}`
+    }
+    
+    time = time.replace(' PM','').replace(' AM','')
+    
+    console.log(time)
+    return time
 }

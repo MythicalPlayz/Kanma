@@ -98,12 +98,13 @@ export default function Slider() {
           </Link>
         ))}
 
-        <button className="absolute top-50 bottom-50 left-5 w-10 h-10 bg-tertiary rounded-full hover:cursor-pointer z-10" onClick={handlePrevSlide} aria-label="Previous slide">
+        <button className="absolute top-50 bottom-50 left-5 w-10 h-10 bg-tertiary rounded-full hover:cursor-pointer z-10 border border-white" onClick={handlePrevSlide} aria-label="Previous slide">
           <FontAwesomeIcon icon={faChevronLeft} />
         </button>
 
 
-        <button className="absolute top-50 bottom-50 right-5 w-10 h-10 bg-tertiary rounded-full hover:cursor-pointer z-10" onClick={handleNextSlide} aria-label="Next slide">
+
+        <button className="absolute top-50 bottom-50 right-5 w-10 h-10 bg-tertiary rounded-full hover:cursor-pointer z-10 border border-white" onClick={handleNextSlide} aria-label="Next slide">
           <FontAwesomeIcon icon={faChevronRight} />
         </button>
       </div>

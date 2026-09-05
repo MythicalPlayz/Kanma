@@ -65,6 +65,7 @@
 
 
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import Header from './components/Header/Header';
 
 function Home() {
   return <h2>Home Page</h2>;
@@ -76,12 +77,12 @@ function About() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <nav style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+    <BrowserRouter className='font-poppins'>
+      {/* <nav style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
-      </nav>
-
+      </nav> */}
+      <Header></Header>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />

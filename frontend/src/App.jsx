@@ -77,7 +77,7 @@ function About() {
 
 export default function App() {
   return (
-    <BrowserRouter className='font-poppins'>
+    <BrowserRouter>
       {/* <nav style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>

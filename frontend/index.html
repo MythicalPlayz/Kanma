@@ -12,9 +12,13 @@
   <title>frontend</title>
 </head>
 
-<body>
+<body class="preload dark:bg-primary dark:text-white font-poppins transition-colors duration-300 ease-in-out">
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
 </body>
-
+<script>
+  window.addEventListener('load', () => {
+    document.body.classList.remove('preload');
+  });
+</script>
 </html>

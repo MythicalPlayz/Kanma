@@ -11,3 +11,10 @@
 @theme {
   --font-poppins: "Poppins", sans-serif;
 }
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+.preload,
+.preload * {
+  transition: none !important;
+}

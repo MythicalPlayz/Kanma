@@ -1,0 +1,34 @@
+{
+    "mainName": {
+        "en": "Kanma Cinemas",
+        "ar": "سنيما كانما"
+    },
+    "darkMode": {
+        "en": "DK",
+        "ar": "DK"
+    },
+    "lightMode": {
+        "en": "LT",
+        "ar": "LT"
+    },
+    "movies": {
+        "en": "Movies",
+        "ar": "أفلام"
+    },
+    "cinemas": {
+        "en": "Cinemas",
+        "ar": "سينماهات"
+    },
+    "snacks": {
+        "en": "Snacks",
+        "ar": "وجبات"
+    },
+    "support": {
+        "en": "Support",
+        "ar": "الدعم"
+    },
+    "account": {
+        "en": "Account",
+        "ar": "الحساب"
+    }
+}

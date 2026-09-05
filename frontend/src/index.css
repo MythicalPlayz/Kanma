@@ -10,6 +10,7 @@
 
 @theme {
   --font-poppins: "Poppins", sans-serif;
+  --font-cairo: "Cairo", sans-serif;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));

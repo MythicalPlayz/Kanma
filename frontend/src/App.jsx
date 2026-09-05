@@ -66,14 +66,9 @@
 
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Header from './components/Header/Header';
+import Home from './components/Home/Home';
 
-function Home() {
-  return <h2>Home Page</h2>;
-}
 
-function About() {
-  return <h2>About Page</h2>;
-}
 
 export default function App() {
   return (
@@ -85,7 +80,7 @@ export default function App() {
       <Header></Header>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+        {/* <Route path="/about" element={<About />} /> */}
       </Routes>
     </BrowserRouter>
   );

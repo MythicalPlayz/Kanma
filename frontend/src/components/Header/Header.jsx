@@ -7,6 +7,9 @@ import translations from '../../lang/main.json';
 
 export default function Header() {
 
+  const FLAG_EN = "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1ec-1f1e7.svg"; // 🇬🇧
+  const FLAG_AR = "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1ea-1f1ec.svg"; // 🇪🇬
+
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem('theme');
     return saved !== null ? Number(saved) : 0;
@@ -44,11 +47,12 @@ export default function Header() {
       <div className={`flex flex-col lg:flex-row w-full lg:w-auto justify-center items-center gap-4 lg:gap-8 transition-all duration-500 ease-in-out lg:max-h-none lg:overflow-visible ${menuOpen ? 'max-h-250 overflow-hidden' : 'max-h-0 overflow-hidden'}`}>
         <button className='flex items-center gap-0.5 justify-center flex-nowrap p-2 cursor-pointer' onClick={() => setDarkMode(darkMode === 0 ? 1 : 0)}>
           <FontAwesomeIcon icon={(darkMode === 0 ? faMoon : faSun)}></FontAwesomeIcon>
-          <h3 className='text-xl'>{darkMode === 0 ? translations.darkMode[lang] : translations.lightMode[lang]}</h3>
+          {/* <h3 className='text-xl'>{darkMode === 0 ? translations.darkMode[lang] : translations.lightMode[lang]}</h3> */}
         </button>
         <button className='flex items-center gap-0.5 justify-center flex-nowrap p-2 cursor-pointer' onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}>
-          <FontAwesomeIcon icon={faGlobe}></FontAwesomeIcon>
-          <h3 className='text-xl'>{lang === 'en' ? 'EN' : 'AR'}</h3>
+          {/* <FontAwesomeIcon icon={faGlobe}></FontAwesomeIcon> */}
+          <img src={lang === 'en' ? FLAG_EN : FLAG_AR} alt="Language Flag" className="w-6 h-6" />
+          {/* <h3 className='text-xl'>{lang === 'en' ? '🇬🇧' : '🇪🇬'}</h3> */}
         </button>
         <Link to="/" className='flex items-center gap-0.5 justify-center flex-nowrap p-2'>
           <FontAwesomeIcon icon={faFilm}></FontAwesomeIcon>

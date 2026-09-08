@@ -4,21 +4,19 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobe, faMoon, faSun, faFilm, faLocationDot, faUserAlt, faBowlFood, faHeadset, faBars } from '@fortawesome/free-solid-svg-icons';
 import translations from '../../lang/main.json';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 export default function Header() {
 
   const FLAG_EN = "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1ec-1f1e7.svg"; // 🇬🇧
   const FLAG_AR = "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1ea-1f1ec.svg"; // 🇪🇬
+  const { lang, setLang, isRTL } = useLanguage();
 
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem('theme');
     return saved !== null ? Number(saved) : 0;
   });
   const [menuOpen, setMenuOpen] = useState(false)
-
-  const [lang, setLang] = useState(() => {
-    return localStorage.getItem('lang') || 'en';
-  });
 
   useEffect(() => {
     localStorage.setItem('lang', lang);

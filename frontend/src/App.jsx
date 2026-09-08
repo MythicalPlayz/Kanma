@@ -67,21 +67,24 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Home from './components/Home/Home';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 
 
 export default function App() {
   return (
-    <BrowserRouter>
-      {/* <nav style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+    <LanguageProvider>
+      <BrowserRouter>
+        {/* <nav style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
       </nav> */}
-      <Header></Header>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        {/* <Route path="/about" element={<About />} /> */}
-      </Routes>
-    </BrowserRouter>
+        <Header></Header>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          {/* <Route path="/about" element={<About />} /> */}
+        </Routes>
+      </BrowserRouter>
+    </LanguageProvider>
   );
 }

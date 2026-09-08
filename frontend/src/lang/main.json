@@ -30,5 +30,33 @@
     "account": {
         "en": "Account",
         "ar": "الحساب"
+    },
+    "nowShowing": {
+        "en": "Now Showing",
+        "ar": "يعرض الآن"
+    },
+    "bookNow": {
+        "en": "Book Now",
+        "ar": "احجز الآن"
+    },
+    "selectCinema": {
+        "en": "Select Cinema",
+        "ar": "اختر السينما"
+    },
+    "selectTime": {
+        "en": "Select Time",
+        "ar": "اختر الوقت"
+    },
+    "comingSoon": {
+        "en": "Coming Soon",
+        "ar": "قريبًا"
+    },
+    "loadMore": {
+        "en": "Load More",
+        "ar": "عرض المزيد"
+    },
+    "language": {
+        "en": "Language",
+        "ar": "اللغة"
     }
 }

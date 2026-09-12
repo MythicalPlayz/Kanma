@@ -11,7 +11,7 @@ export default function NowShowing() {
   return (
     <div className=" flex flex-col justify-center gap-8 my-4 px-8">
       <h2 className="text-3xl font-bold uppercase mx-auto flex items-center gap-2 lg:mx-0">{<FontAwesomeIcon icon={faFilm} />} {translations.nowShowing[lang]}</h2>
-      <div className=" flex flex-col lg:flex-row justify-center gap-8 items-center">
+      <div className=" flex md:flex-row justify-center gap-8 items-center">
         <select name="Cinema" id="cinema" className="bg-tertiary p-4 rounded-md font-bold text-white" placeholder="{translations.selectCinema[lang]}">
           <option value="">{translations.selectCinema[lang]}</option>
           <option value="cinema1">Cinema 1</option>

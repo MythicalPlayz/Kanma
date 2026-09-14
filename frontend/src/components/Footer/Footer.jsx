@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 export default function Footer() {
   return (
-    <div className="bg-tertiary w-full p-4 flex flex-col lg:flex-row justify-center items-start text-white gap-8 pb-16 divide-y lg:divide-y-0 lg:divide-x divide-white/50">
+    <div className="bg-tertiary  w-full p-4 flex flex-col lg:flex-row justify-evenly items-start text-white gap-8 pb-16 divide-y lg:divide-y-0 divide-white/50">
       <div className="flex flex-col justify-center items-start gap-2 py-2 lg:py-0 lg:px-2">
         <h3 className="text-lg font-semibold">Kanma Cinemas</h3>
         <div className="flex flex-row gap-2">

@@ -58,5 +58,33 @@
     "language": {
         "en": "Language",
         "ar": "اللغة"
+    },
+    "description": {
+        "en": "Description",
+        "ar": "الوصف"
+    },
+    "director": {
+        "en": "Director",
+        "ar": "المخرج"
+    },
+    "cast": {
+        "en": "Cast",
+        "ar": "طاقم التمثيل"
+    },
+    "releaseDate": {
+        "en": "Release Date",
+        "ar": "تاريخ الإصدار"
+    },
+    "ageRating": {
+        "en": "Age Rating",
+        "ar": "تصنيف العمر"
+    },
+    "genre": {
+        "en": "Genre",
+        "ar": "النوع"
+    },
+    "duration": {
+        "en": "Duration",
+        "ar": "المدة"
     }
 }

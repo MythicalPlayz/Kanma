@@ -35,7 +35,7 @@ export default function Header() {
   }, [darkMode]);
 
   return (
-    <nav className="w-full lg:h-12.5 bg-secondary flex flex-col lg:flex-row lg:gap-0 items-center justify-between px-4 lg:px-16 text-white font-bold">
+    <nav className="w-full lg:h-12.5 bg-secondary flex flex-col lg:flex-row lg:gap-0 items-center justify-between px-4 lg:px-16 text-white font-bold z-10">
       <div className='flex flex-row items-center justify-between gap-2 w-full h-full lg:w-auto'>
         <Link to="/"><h1 className="uppercase lg:text-xl">{translations.mainName[lang]}</h1></Link>
         <button className='flex items-center gap-0.5 justify-center flex-nowrap p-2 cursor-pointer lg:hidden' onClick={() => setMenuOpen(!menuOpen)}>

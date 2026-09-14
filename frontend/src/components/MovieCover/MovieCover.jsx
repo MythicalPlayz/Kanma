@@ -21,7 +21,7 @@ export default function MovieCover({ titleEn, titleAr, poster, ageRating, langua
   const flagSrc = FLAGS[language] || FLAGS.en;
 
   return (
-    <Link to="/" className="flex flex-col h-full shadow-2xl rounded-xl p-2 hover:cursor-pointer hover:scale-105 transition-all duration-300">
+    <Link to="/movie/1" className="flex flex-col h-full shadow-2xl rounded-xl p-2 hover:cursor-pointer hover:scale-105 transition-all duration-300">
       <div className="relative w-full aspect-2/3 overflow-hidden rounded-lg">
         <img src={poster} alt={currentTitle} className="w-full h-full object-cover" />
         <div className="absolute w-10 h-10 rounded-full bg-tertiary border border-white top-2 right-2 flex justify-center items-center shadow">

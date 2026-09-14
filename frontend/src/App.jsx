@@ -70,6 +70,7 @@ import Home from './components/Home/Home';
 import { LanguageProvider } from './contexts/LanguageContext';
 import Footer from './components/Footer/Footer';
 import E404 from './components/E404/E404';
+import MovieDetails from './components/MovieDetails/MovieDetails';
 
 
 
@@ -86,6 +87,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/404" element={<E404 />} />
           <Route path="*" element={<E404 />} />
+          <Route path="/movie/:id" element={<MovieDetails />} />
           {/* <Route path="/about" element={<About />} /> */}
         </Routes>
         <Footer/>

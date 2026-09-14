@@ -69,6 +69,7 @@ import Header from './components/Header/Header';
 import Home from './components/Home/Home';
 import { LanguageProvider } from './contexts/LanguageContext';
 import Footer from './components/Footer/Footer';
+import E404 from './components/E404/E404';
 
 
 
@@ -83,6 +84,8 @@ export default function App() {
         <Header/>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/404" element={<E404 />} />
+          <Route path="*" element={<E404 />} />
           {/* <Route path="/about" element={<About />} /> */}
         </Routes>
         <Footer/>

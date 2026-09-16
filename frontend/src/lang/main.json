@@ -86,5 +86,49 @@
     "duration": {
         "en": "Duration",
         "ar": "المدة"
+    },
+    "siteMap": {
+        "en": "Site Map",
+        "ar": "خريطة الموقع"
+    },
+    "privacyPolicy": {
+        "en": "Privacy Policy",
+        "ar": "سياسة الخصوصية"
+    },
+    "termsOfService": {
+        "en": "Terms of Use",
+        "ar": "شروط الاستخدام"
+    },
+    "contactUs": {
+        "en": "Contact Us",
+        "ar": "اتصل بنا"
+    },
+    "faq": {
+        "en": "FAQ",
+        "ar": "الأسئلة الشائعة"
+    },
+    "refundPolicy": {
+        "en": "Refund Policy",
+        "ar": "سياسة الاسترداد"
+    },
+    "termsAndConditions": {
+        "en": "Terms and Conditions",
+        "ar": "الشروط والأحكام"
+    },
+    "rightsReserved": {
+        "en": "All rights reserved",
+        "ar": "جميع الحقوق محفوظة"
+    },
+    "quickLinks": {
+        "en": "Quick Links",
+        "ar": "روابط سريعة"
+    },
+    "home": {
+        "en": "Home",
+        "ar": "الرئيسية"
+    },
+    "explore": {
+        "en": "Explore",
+        "ar": "استكشف"
     }
 }

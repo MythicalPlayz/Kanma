@@ -52,7 +52,7 @@ export default function Header() {
           <img src={lang === 'en' ? FLAG_EN : FLAG_AR} alt="Language Flag" className="w-6 h-6" />
           {/* <h3 className='text-xl'>{lang === 'en' ? '🇬🇧' : '🇪🇬'}</h3> */}
         </button>
-        <Link to="/" className='flex items-center gap-0.5 justify-center flex-nowrap p-2'>
+        <Link to="/movies" className='flex items-center gap-0.5 justify-center flex-nowrap p-2'>
           <FontAwesomeIcon icon={faFilm}></FontAwesomeIcon>
           <h3 className='text-xl'>{translations.movies[lang]}</h3>
         </Link>

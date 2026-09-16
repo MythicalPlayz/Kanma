@@ -71,6 +71,8 @@ import { LanguageProvider } from './contexts/LanguageContext';
 import Footer from './components/Footer/Footer';
 import E404 from './components/E404/E404';
 import MovieDetails from './components/MovieDetails/MovieDetails';
+import MoviesPage from './components/MoviesPage/MoviesPage';
+import ShowMoviesPage from './components/ShowMoviesPage/ShowMoviesPage';
 
 
 
@@ -88,6 +90,9 @@ export default function App() {
           <Route path="/404" element={<E404 />} />
           <Route path="*" element={<E404 />} />
           <Route path="/movie/:id" element={<MovieDetails />} />
+          <Route path="/movies" element={<MoviesPage />} />
+          <Route path="/movies/now-showing" element={<ShowMoviesPage type="nowShowing" />} />
+          <Route path="/movies/coming-soon" element={<ShowMoviesPage type="comingSoon" />} />
           {/* <Route path="/about" element={<About />} /> */}
         </Routes>
         <Footer/>

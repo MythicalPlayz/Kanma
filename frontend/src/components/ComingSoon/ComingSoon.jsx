@@ -6,7 +6,7 @@ import MovieCover from '../MovieCover/MovieCover';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilm } from '@fortawesome/free-solid-svg-icons';
 
-export default function ComingSoon() {
+export default function ComingSoon( { showAll = false } ) {
   const { lang, setLang, isRTL } = useLanguage();
    return (
     <div className=" flex flex-col justify-center gap-8 my-4 px-8">
@@ -17,11 +17,13 @@ export default function ComingSoon() {
         <MovieCover titleEn="Detective Conan 29" titleAr="المحقق كونان 29" poster="https://assets.voxcinemas.com/posters/P_HO00013505_1783599648053.jpg" ageRating="NR" language="jp" isBookable={false}></MovieCover>
         <MovieCover titleEn="Hexed" titleAr="هكسد" poster="https://assets.voxcinemas.com/posters/P_HO00013335_1782228087065.jpg" ageRating="NR" language="en" isBookable={false}></MovieCover>
       </div>
-      <div className="w-full flex justify-center items-center">
-        <button className="bg-tertiary p-4 rounded-md font-bold text-white hover:cursor-pointer hover:bg-tertiary/80 transition-all duration-300">
-          {translations.loadMore[lang]}
-        </button>
-      </div>
+      {!showAll && (
+        <div className="w-full flex justify-center items-center">
+          <button className="bg-tertiary p-4 rounded-md font-bold text-white hover:cursor-pointer hover:bg-tertiary/80 transition-all duration-300">
+            {translations.loadMore[lang]}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

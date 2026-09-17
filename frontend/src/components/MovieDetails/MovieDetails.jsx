@@ -39,7 +39,7 @@ export default function MovieDetails() {
   };
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center py-8 max-w-500 mx-auto">
+    <div className="w-full min-h-screen flex items-center justify-center py-8 max-w-7xl mx-auto">
       <div className="border-tertiary mx-auto border-2 w-5/6 lg:w-3/4 p-4 rounded-3xl flex flex-col justify-center items-center">
         <div className='w-5/6 flex flex-col lg:flex-row justify-between items-center gap-8'>
           <div className="relative">

@@ -6,7 +6,7 @@ import ComingSoon from '../ComingSoon/ComingSoon';
 
 export default function Home() {
   return (
-    <div className="w-full lg:p-8 max-w-500 mx-auto">
+    <div className="w-full lg:p-8 max-w-7xl mx-auto">
       <Slider></Slider>
       <NowShowing></NowShowing>
       <ComingSoon></ComingSoon>

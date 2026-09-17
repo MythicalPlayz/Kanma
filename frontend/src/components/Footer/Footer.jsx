@@ -45,7 +45,7 @@ export default function Footer() {
         <div className="flex flex-col justify-center items-start gap-2">
           <h3 className="text-lg font-semibold">{translations.support[lang]}</h3>
           <Link to="/support/terms-and-conditions" className="hover:underline">{translations.termsAndConditions[lang]}</Link>
-          <Link to="/support/terms-of-use" className="hover:underline">{translations.termsOfService[lang]}</Link>
+          <Link to="/support/terms-of-use" className="hover:underline">{translations.termsOfUse[lang]}</Link>
           <Link to="/support/privacy-policy" className="hover:underline">{translations.privacyPolicy[lang]}</Link>
           <Link to="/support/refunds" className="hover:underline">{translations.refundPolicy[lang]}</Link>
           <Link to="/support/faq" className="hover:underline">{translations.faq[lang]}</Link>

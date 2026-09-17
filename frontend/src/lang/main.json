@@ -95,7 +95,7 @@
         "en": "Privacy Policy",
         "ar": "سياسة الخصوصية"
     },
-    "termsOfService": {
+    "termsOfUse": {
         "en": "Terms of Use",
         "ar": "شروط الاستخدام"
     },
@@ -104,7 +104,7 @@
         "ar": "اتصل بنا"
     },
     "faq": {
-        "en": "FAQ",
+        "en": "Frequently Asked Questions",
         "ar": "الأسئلة الشائعة"
     },
     "refundPolicy": {
@@ -130,5 +130,17 @@
     "explore": {
         "en": "Explore",
         "ar": "استكشف"
+    },
+    "howtohelp": {
+        "en": "How can we help ?",
+        "ar": "كيف يمكننا مساعدتك ؟"
+    },
+    "goback": {
+        "en": "Go Back",
+        "ar": "العودة"
+    },
+    "refundTDLR": {
+        "en": "TL;DR: Tickets are refundable up to 30 minutes before showtime, provided they haven't been printed.",
+        "ar": "باختصار: يمكن استرداد قيمة التذكرة حتى 30 دقيقة قبل موعد العرض، بشرط ألا تكون قد طُبعت"
     }
 }

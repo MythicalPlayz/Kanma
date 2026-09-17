@@ -1,0 +1,78 @@
+{
+    "en": [
+        {
+            "question": "What is Kanma Cinemas ?",
+            "answer": "Kanma Cinemas is a movie theater chain that offers a wide range of movies and snacks for moviegoers to enjoy."
+        },
+        {
+            "question": "How can I book tickets ?",
+            "answer": "You can book tickets through our website or mobile app in advance or at the cinema."
+        },
+        {
+            "question": "What payment methods do you accept ?",
+            "answer": "Currently we only accept bank cards and credit cards for online payments. We also accept cash payments at the cinema box office."
+        },
+        {
+            "question": "Can I cancel or change my booking ?",
+            "answer": "Yes, you can cancel or change your booking through our website or mobile app. Please refer to our refund policy for more details."
+        },
+        {
+            "question": "Do you offer any discounts or promotions ?",
+            "answer": "Yes, we regularly offer discounts and promotions. Please check our website or mobile app for the latest offers."
+        },
+        {
+            "question": "What are the cinema's opening hours ?",
+            "answer": "Our cinemas are open from 10:00 AM to 12:00 AM daily."
+        },
+        {
+            "question": "Is there parking available at the cinema ?",
+            "answer": "Yes, we have parking facilities available for our customers."
+        },
+        {
+            "question": "Are there any age restrictions for certain movies ?",
+            "answer": "Yes, some movies may have age restrictions. Please check the movie's rating before booking tickets."
+        },
+        {
+            "question": "For Kids Movies, it is safe for children to watch ?",
+            "answer": "Yes, we provide a lower safe sound level for children (for kids screens)."
+        }
+    ],
+    "ar": [
+        {
+            "question": "ما هي سينمات كانما؟",
+            "answer": "سينمات كانما هي سلسلة صالات سينما تقدم مجموعة واسعة من أحدث الأفلام والوجبات الخفيفة لتجربة ترفيهية مميزة لرواد السينما."
+        },
+        {
+            "question": "كيف يمكنني حجز التذاكر؟",
+            "answer": "يمكنك حجز التذاكر مسبقاً عبر موقعنا الإلكتروني أو تطبيق الهاتف المحمول، أو شراؤها مباشرة من شباك تذاكر السينما."
+        },
+        {
+            "question": "ما هي طرق الدفع المتاحة؟",
+            "answer": "نقبل حالياً البطاقات البنكية والائتمانية للدفع عبر الإنترنت، بالإضافة إلى إمكانية الدفع النقدي في شباك تذاكر السينما."
+        },
+        {
+            "question": "هل يمكنني إلغاء أو تعديل حجزي؟",
+            "answer": "نعم، يمكنك إلغاء أو تعديل الحجز عبر موقعنا الإلكتروني أو تطبيق الهاتف المحمول. يرجى مراجعة سياسة الاسترداد لمزيد من التفاصيل."
+        },
+        {
+            "question": "هل تتوفر أي خصومات أو عروض ترويجية؟",
+            "answer": "نعم، نقدم خصومات وعروضاً ترويجية بانتظام. يمكنك متابعة موقعنا أو تطبيق الهاتف للاطلاع على أحدث العروض."
+        },
+        {
+            "question": "ما هي أوقات العمل في السينما؟",
+            "answer": "صالات السينما لدينا مفتوحة يومياً من الساعة 10:00 صباحاً حتى 12:00 منتصف الليل."
+        },
+        {
+            "question": "هل توجد مواقف سيارات متاحة في السينما؟",
+            "answer": "نعم، تتوفر مواقف سيارات مخصصة لخدمة عملائنا."
+        },
+        {
+            "question": "هل توجد تصنيفات عمرية لأفلام معينة؟",
+            "answer": "نعم، تخضع بعض الأفلام لقيود تصنيف عمري. يرجى التحقق من التصنيف العمري الخاص بالفيلم قبل إتمام الحجز."
+        },
+        {
+            "question": "بالنسبة لأفلام الأطفال، هل مشاهدتها آمنة لهم؟",
+            "answer": "نعم، نحرص على ضبط الصوت عند مستويات منخفضة وآمنة تماماً للأطفال داخل قاعات العرض المخصصة لهم."
+        }
+    ]
+}

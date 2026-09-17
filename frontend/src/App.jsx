@@ -7,6 +7,11 @@ import E404 from './components/E404/E404';
 import MovieDetails from './components/MovieDetails/MovieDetails';
 import MoviesPage from './components/MoviesPage/MoviesPage';
 import ShowMoviesPage from './components/ShowMoviesPage/ShowMoviesPage';
+import SupportPage from './components/SupportPage/SupportPage';
+import SupportPageContact from './components/SupportPageContact/SupportPageContact';
+import SupportPageItem from './components/SupportPageItem/SupportPageItem';
+import SupportPageFaq from './components/SupportPageFAQ/SupportPageFAQ';
+import SupportPageRefund from './components/SupportPageRefund/SupportPageRefund';
 
 function RootLayout() {
   return (
@@ -44,6 +49,36 @@ const router = createBrowserRouter([
             element: <ShowMoviesPage type="comingSoon" />,
           },
         ],
+      },
+      {
+        path: 'support',
+        element: <SupportPage />,
+        children: [
+          {
+            "path": "contact",
+            "element": <SupportPageContact />
+          },
+          {
+            "path": "faq",
+            "element": <SupportPageFaq />
+          },
+          {
+            "path": "terms-and-conditions",
+            "element": <SupportPageItem item="termsAndConditions" />
+          },
+          {
+            "path": "terms-of-use",
+            "element": <SupportPageItem item="termsOfUse" />
+          },
+          {
+            "path": "privacy-policy",
+            "element": <SupportPageItem item="privacyPolicy" />
+          },
+          {
+            "path": "refunds",
+            "element": <SupportPageRefund />
+          }
+        ]
       },
       {
         path: '404',

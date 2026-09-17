@@ -1,0 +1,25 @@
+========================================
+KANMA CINEMAS - PRIVACY POLICY
+========================================
+
+1. INFORMATION WE COLLECT
+- Personal Identifiers: Full name, email address, phone number, and optional date of birth.
+- Booking & Financial Records: Transaction IDs, booked movies, seat preferences, and order history. Note: Full payment card details are handled directly by PCI-compliant payment gateways and are never stored on our servers.
+- Technical & Device Data: IP address, operating system, browser specifications, and platform analytics cookies.
+
+2. HOW WE USE YOUR DATA
+- To generate tickets, confirm transactions, and deliver order confirmations via email/SMS.
+- To notify you about changes to screening times or cancelled sessions.
+- To improve our website performance, app features, and service quality.
+- To send promotional discounts, newsletters, and loyalty rewards (only with your explicit opt-in consent).
+
+3. DATA SHARING & THIRD PARTIES
+- We do not sell, lease, or monetize your personal information to third parties.
+- We share necessary minimal data with verified service providers (payment processors, cloud hosts, SMS gateways) solely to complete required business operations.
+- Data may be disclosed if required by legal summons, court order, or official governmental directive.
+
+4. DATA RETENTION & SECURITY
+We implement industry-standard encryption protocols and administrative safeguards to keep your personal records secure against unauthorized access, loss, or alteration.
+
+5. YOUR PRIVACY RIGHTS
+You have the right to request a copy of your stored personal data, request corrections, or ask for your account and data to be permanently erased. Contact support@kanmacinemas.com for any privacy-related requests.

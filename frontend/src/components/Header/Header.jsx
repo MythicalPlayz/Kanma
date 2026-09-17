@@ -56,19 +56,19 @@ export default function Header() {
           <FontAwesomeIcon icon={faFilm}></FontAwesomeIcon>
           <h3 className='text-xl'>{translations.movies[lang]}</h3>
         </Link>
-        <Link to="/" className='flex items-center gap-0.5 justify-center flex-nowrap p-2'>
+        <Link to="/cinemas" className='flex items-center gap-0.5 justify-center flex-nowrap p-2'>
           <FontAwesomeIcon icon={faLocationDot}></FontAwesomeIcon>
           <h3 className='text-xl'>{translations.cinemas[lang]}</h3>
         </Link>
-        <Link to="/" className='flex items-center gap-0.5 justify-center flex-nowrap p-2'>
+        <Link to="/snacks" className='flex items-center gap-0.5 justify-center flex-nowrap p-2'>
           <FontAwesomeIcon icon={faBowlFood}></FontAwesomeIcon>
           <h3 className='text-xl'>{translations.snacks[lang]}</h3>
         </Link>
-        <Link to="/" className='flex items-center gap-0.5 justify-center flex-nowrap p-2'>
+        <Link to="/support" className='flex items-center gap-0.5 justify-center flex-nowrap p-2'>
           <FontAwesomeIcon icon={faHeadset}></FontAwesomeIcon>
           <h3 className='text-xl'>{translations.support[lang]}</h3>
         </Link>
-        <Link to="/" className='flex items-center gap-0.5 justify-center flex-nowrap p-2'>
+        <Link to="/account" className='flex items-center gap-0.5 justify-center flex-nowrap p-2'>
           <FontAwesomeIcon icon={faUserAlt}></FontAwesomeIcon>
           <h3 className='text-xl'>{translations.account[lang]}</h3>
         </Link>

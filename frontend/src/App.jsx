@@ -12,12 +12,13 @@ import SupportPageContact from './components/SupportPageContact/SupportPageConta
 import SupportPageItem from './components/SupportPageItem/SupportPageItem';
 import SupportPageFaq from './components/SupportPageFAQ/SupportPageFAQ';
 import SupportPageRefund from './components/SupportPageRefund/SupportPageRefund';
+import SnacksPage from './components/SnacksPage/SnacksPage';
 
 function RootLayout() {
   return (
     <>
       <Header />
-      <Outlet />
+      <Outlet className="max-w-7xl mx-auto" />
       <Footer />
     </>
   );
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
             element: <ShowMoviesPage type="comingSoon" />,
           },
         ],
+      },
+      {
+        path: 'snacks',
+        element: <SnacksPage />,
       },
       {
         path: 'support',

@@ -15,11 +15,11 @@ export default function SupportPage() {
     <div className="flex flex-col justify-start items-center gap-4 py-8 min-h-screen">
       <h2 className="text-2xl font-bold"><FontAwesomeIcon icon={faHeadset} /> {translations.howtohelp[lang]}</h2>
       {outlet ? (
-        <div className="w-5/6 lg:w-3/4 max-w-7xl">
+        <div className="w-5/6 lg:w-3/4 ">
           {outlet}
         </div>
       ) : (
-        <div className="w-5/6 lg:w-3/4 max-w-7xl grid grid-cols-1 gap-4">
+        <div className="w-5/6 lg:w-3/4  grid grid-cols-1 gap-4">
           <Link className="bg-secondary text-white p-4 rounded-lg text-center font-bold text-xl shadow-md hover:bg-tertiary hover:scale-105 transition-all duration-300" to="/support/faq">
             {translations.faq[lang]}
           </Link>

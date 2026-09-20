@@ -8,22 +8,22 @@ const slides = [
   {
     url: "https://assets.voxcinemas.com/content/Mahmoud_El_Tany_1HP-banner_EN_1786530849.jpg",
     alt: "Slider Image 1",
-    link: "/"
+    link: "/movie/1"
   },
   {
     url: "https://assets.voxcinemas.com/content/newslatter-banner__1__1748876996.png",
     alt: "Slider Image 2",
-    link: "/"
+    link: "/snacks"
   },
   {
     url: "https://assets.voxcinemas.com/content/IMG_2163_1748877141.PNG",
     alt: "Slider Image 3",
-    link: "/"
+    link: "/snacks"
   },
   {
     url: "https://assets.voxcinemas.com/content/Spider_Man_1HP-banner_EN_1784717789.jpg",
     alt: "Slider Image 4",
-    link: "/"
+    link: "/movie/2"
   },
 ];
 

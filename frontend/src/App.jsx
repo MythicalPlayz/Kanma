@@ -13,6 +13,7 @@ import SupportPageItem from './components/SupportPageItem/SupportPageItem';
 import SupportPageFaq from './components/SupportPageFAQ/SupportPageFAQ';
 import SupportPageRefund from './components/SupportPageRefund/SupportPageRefund';
 import SnacksPage from './components/SnacksPage/SnacksPage';
+import CinemasPage from './components/CinemasPage/CinemasPage';
 
 function RootLayout() {
   return (
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: 'snacks',
         element: <SnacksPage />,
+      },
+      {
+        path: 'cinemas',
+        element: <CinemasPage />,
       },
       {
         path: 'support',

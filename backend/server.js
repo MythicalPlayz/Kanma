@@ -1,7 +1,35 @@
+// // In-memory placeholder state
+// let appState = {
+//   title: "Real-Time Project",
+//   counter: 0,
+//   lastUpdated: new Date().toISOString()
+// };
+
+// // REST Endpoint to fetch initial state
+// app.get('/api/state', (req, res) => {
+//   res.json(appState);
+// });
+
+// // Mock endpoint: trigger an update across all clients
+// app.post('/api/update', (req, res) => {
+//   appState = {
+//     ...appState,
+//     counter: appState.counter + 1,
+//     lastUpdated: new Date().toISOString()
+//   };
+  
+//   // Broadcast change to all connected WebSocket clients
+//   io.emit('stateUpdated', appState);
+//   res.json({ success: true, current: appState });
+// });
+
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
+import mongoose from 'mongoose'; // 1. Import Mongoose
+
+import moviesRouter from './api/movies.js';
 
 const app = express();
 app.use(cors());
@@ -12,30 +40,15 @@ const io = new Server(httpServer, {
   cors: { origin: 'http://localhost:5173' } // Vite dev URL
 });
 
-// In-memory placeholder state
-let appState = {
-  title: "Real-Time Project",
-  counter: 0,
-  lastUpdated: new Date().toISOString()
-};
+// 2. Connect to MongoDB (using 127.0.0.1 to avoid IPv6 issues)
+const MONGO_URI = 'mongodb://127.0.0.1:27017/kanmacinemas'; // Change cinemas_db if your DB has another name
 
-// REST Endpoint to fetch initial state
-app.get('/api/state', (req, res) => {
-  res.json(appState);
-});
+mongoose.connect(MONGO_URI)
+  .then(() => console.log(' Connected to MongoDB successfully!'))
+  .catch((err) => console.error(' MongoDB connection error:', err.message));
 
-// Mock endpoint: trigger an update across all clients
-app.post('/api/update', (req, res) => {
-  appState = {
-    ...appState,
-    counter: appState.counter + 1,
-    lastUpdated: new Date().toISOString()
-  };
-  
-  // Broadcast change to all connected WebSocket clients
-  io.emit('stateUpdated', appState);
-  res.json({ success: true, current: appState });
-});
+// Routes
+app.use('/api/movies', moviesRouter);
 
 io.on('connection', (socket) => {
   console.log(`Client connected: ${socket.id}`);

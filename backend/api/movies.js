@@ -2,6 +2,7 @@ import express from "express";
 import Movie from "../models/Movie.js";
 const router = express.Router();
 
+
 // GET /api/movies/home - Returns 4 released and 4 coming soon movies
 router.get('/home', async (req, res) => {
     try {

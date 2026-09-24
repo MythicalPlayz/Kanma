@@ -74,53 +74,53 @@ export default function MovieDetails() {
       {error && <ErrorElement />}
       {!loading && !error && <>
         <div className="border-tertiary mx-auto border-2 w-5/6 lg:w-3/4 p-4 rounded-3xl flex flex-col justify-center items-center">
-          <div className='w-5/6 flex flex-col lg:flex-row justify-between items-center gap-8'>
-            <div className="relative">
-              <img src={movieData.posterURL} alt={movieData.titleEN} className="aspect-2/3 object-cover h-100 rounded-2xl" />
+          <div className='w-5/6 grid grid-cols-1 lg:grid-cols-2 justify-between items-center gap-2'>
+            <div className="relative aspect-2/3 h-100">
+              <img src={movieData.posterURL} alt={movieData.titleEN} className="aspect-2/3 object-cover h-100 rounded-2xl relative" />
               <div className="absolute w-12 h-12 rounded-full bg-tertiary border border-white top-2 right-2 flex justify-center items-center shadow">
-              <span className="text-white text-sm font-bold">{movieData.rating}</span>
+                <span className="text-white text-sm font-bold">{movieData.rating}</span>
+              </div>
+            </div>
+            <div className="w-full aspect-video rounded-2xl overflow-hidden ">
+              <iframe className="w-full h-full" src={movieData.trailerURL?.replace('watch?v=', 'embed/')} title="Trailer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
           </div>
-          <div>
-            <iframe className="w-full h-full lg:w-84 lg:h-74 xl:w-100" src={movieData.trailerURL?.replace('watch?v=', 'embed/')} title="Trailer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <div className="w-full mt-4 flex flex-col gap-2 text-center lg:text-start">
+            {lang === 'ar' ? (
+              <>
+                <h1 className="text-2xl font-bold">{movieData.titleAR}</h1>
+              </>
+            ) : (
+              <>
+                <h1 className="text-2xl font-bold">{movieData.titleEN}</h1>
+              </>
+            )}
+            {movieData.canBook ?
+              <div className="flex items-center justify-center m-2 p-4">
+                <Link to={`/book/${id}`} className="bg-tertiary text-white py-2 px-4 rounded-2xl hover:bg-secondary">
+                  {translations.bookNow[lang]}
+                </Link>
+              </div> : <></>}
+            <div className="grid w-full gap-4 grid-cols-1 lg:grid-cols-2">
+              <p className="text-lg font-bold">{translations.description[lang]}:</p>
+              <p className="text-lg">{lang === 'ar' ? movieData.descriptionAR : movieData.descriptionEN}</p>
+              <p className="text-lg font-bold">{translations.duration[lang]}:</p>
+              <p className="text-lg">{movieData.duration}</p>
+              <p className="text-lg font-bold">{translations.language[lang]}:</p>
+              <img src={FLAGS[movieData.language]} alt={movieData.language} className="w-6 h-6" />
+              <p className="text-lg font-bold">{translations.director[lang]}:</p>
+              <p className="text-lg">{movieData.director}</p>
+              <p className="text-lg font-bold">{translations.cast[lang]}:</p>
+              <p className="text-lg">{(movieData.cast).join(', ')}</p>
+              <p className="text-lg font-bold">{translations.releaseDate[lang]}:</p>
+              <p className="text-lg">{lang === 'ar' ? (new Date(movieData.releaseDate).toLocaleDateString('ar-EG', { timeZone: 'UTC' })) : (new Date(movieData.releaseDate).toLocaleDateString('en-GB', { timeZone: 'UTC' }))}</p>
+              <p className="text-lg font-bold">{translations.ageRating[lang]}:</p>
+              <p className="text-lg">{movieData.rating}</p>
+              <p className="text-lg font-bold">{translations.genre[lang]}:</p>
+              <p className="text-lg">{movieData.genre}</p>
+            </div>
           </div>
         </div>
-        <div className="w-full mt-4 flex flex-col gap-2 text-center lg:text-start">
-          {lang === 'ar' ? (
-            <>
-              <h1 className="text-2xl font-bold">{movieData.titleAR}</h1>
-            </>
-          ) : (
-            <>
-              <h1 className="text-2xl font-bold">{movieData.titleEN}</h1>
-            </>
-          )}
-          { movieData.canBook ?
-          <div className="flex items-center justify-center m-2 p-4">
-            <Link to={`/book/${id}`} className="bg-tertiary text-white py-2 px-4 rounded-2xl hover:bg-secondary">
-              {translations.bookNow[lang]}
-            </Link>
-          </div> : <></>}
-          <div className="grid w-full gap-4 grid-cols-1 lg:grid-cols-2">
-            <p className="text-lg font-bold">{translations.description[lang]}:</p>
-            <p className="text-lg">{lang === 'ar' ? movieData.descriptionAR : movieData.descriptionEN}</p>
-            <p className="text-lg font-bold">{translations.duration[lang]}:</p>
-            <p className="text-lg">{movieData.duration}</p>
-            <p className="text-lg font-bold">{translations.language[lang]}:</p>
-            <img src={FLAGS[movieData.language]} alt={movieData.language} className="w-6 h-6" />
-            <p className="text-lg font-bold">{translations.director[lang]}:</p>
-            <p className="text-lg">{movieData.director}</p>
-            <p className="text-lg font-bold">{translations.cast[lang]}:</p>
-            <p className="text-lg">{(movieData.cast).join(', ')}</p>
-            <p className="text-lg font-bold">{translations.releaseDate[lang]}:</p>
-            <p className="text-lg">{lang === 'ar' ? (new Date(movieData.releaseDate).toLocaleDateString('ar-EG', { timeZone: 'UTC' })) : (new Date(movieData.releaseDate).toLocaleDateString('en-GB', { timeZone: 'UTC' }))}</p>
-            <p className="text-lg font-bold">{translations.ageRating[lang]}:</p>
-            <p className="text-lg">{movieData.rating}</p>
-            <p className="text-lg font-bold">{translations.genre[lang]}:</p>
-            <p className="text-lg">{movieData.genre}</p>
-          </div>
-        </div>
-      </div>
       </>}
     </div>
   );

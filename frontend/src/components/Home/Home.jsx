@@ -15,6 +15,8 @@ export default function Home() {
     comingSoon: []
   });
 
+  const [posters, setPosters] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -28,25 +30,43 @@ export default function Home() {
     } catch (error) {
       console.error('Error fetching movies:', error);
       setError(true);
-    } finally {
-      setLoading(false);
     }
 
   };
 
-  useEffect(() => {
-    fetchMovies();
-  }, []);
+  const fetchPosters = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('http://localhost:4000/api/posters');
+      const data = await response.json();
+      setPosters(data);
+    } catch (error) {
+      console.error('Error fetching posters:', error);
+      setError(true);
+    }
 
-  return (
-    <div className="w-full lg:p-8  mx-auto">
-      {loading && <LoadingElement />}
-      {error && <ErrorElement />}
-      {!loading && !error && <>
-        <Slider />
-        <NowShowing loadedMovies={movies.released} />
-        <ComingSoon />
-      </>}
-    </div>
-  );
+  };
+
+  const fetchData = async () => {
+    await fetchMovies();
+    await fetchPosters();
+    setLoading(false);
+  }
+
+
+useEffect(() => {
+  fetchData();
+}, []);
+
+return (
+  <div className="w-full lg:p-8  mx-auto">
+    {loading && <LoadingElement />}
+    {error && <ErrorElement />}
+    {!loading && !error && <>
+      <Slider posters={posters} />
+      <NowShowing loadedMovies={movies.released} />
+      <ComingSoon />
+    </>}
+  </div>
+);
 }

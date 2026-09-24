@@ -4,42 +4,30 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
-const slides = [
-  {
-    url: "https://assets.voxcinemas.com/content/Mahmoud_El_Tany_1HP-banner_EN_1786530849.jpg",
-    alt: "Slider Image 1",
-    link: "/movie/1"
-  },
-  {
-    url: "https://assets.voxcinemas.com/content/newslatter-banner__1__1748876996.png",
-    alt: "Slider Image 2",
-    link: "/snacks"
-  },
-  {
-    url: "https://assets.voxcinemas.com/content/IMG_2163_1748877141.PNG",
-    alt: "Slider Image 3",
-    link: "/snacks"
-  },
-  {
-    url: "https://assets.voxcinemas.com/content/Spider_Man_1HP-banner_EN_1784717789.jpg",
-    alt: "Slider Image 4",
-    link: "/movie/2"
-  },
-];
-
 // Helper to handle negative numbers in JS modulo
 const getIndex = (i, len) => ((i % len) + len) % len;
 
-export default function Slider() {
+export default function Slider({ posters }) {
   const [sliderIndex, setSliderIndex] = useState(1);
   const [isAnimating, setIsAnimating] = useState(false);
 
   // Initial window: [slide 0, slide 1, slide 2]
-  const [activeSlides, setActiveSlides] = useState([
-    slides[0],
-    slides[1],
-    slides[2]
-  ]);
+  // Redunancy system: 
+  if (posters.length < 3) {
+    const extendedPosters = [...posters];
+    while (extendedPosters.length < 3) {
+      extendedPosters.push(posters[extendedPosters.length % posters.length]);
+    }
+    posters = extendedPosters;
+  }
+
+  const slides = posters;
+
+  const [activeSlides, setActiveSlides] = useState((slides) ? [
+    slides[getIndex(sliderIndex - 1, slides.length)],
+    slides[getIndex(sliderIndex, slides.length)],
+    slides[getIndex(sliderIndex + 1, slides.length)]
+  ] : []);
 
   const moveSlides = async (nextIndex, positive = true) => {
     setIsAnimating(true);
@@ -92,9 +80,9 @@ export default function Slider() {
   return (
     <div className="w-full flex items-center justify-center p-8">
       <div className="w-220 h-60 md:h-90 lg:h-110 bg-gray-300 rounded-lg overflow-hidden relative flex flex-nowrap flex-row items-center justify-center transition-all duration-500 ease-in-out hover:scale-105 hover:shadow-lg">
-        {activeSlides.map((slide, index) => (
-          <Link to={slide.link} key={`${slide.url}-${index}`} className="slide absolute w-full h-full" style={{ left: `${(index - 1) * 100}%`, top: '0' }}>
-            <img src={slide.url} alt={slide.alt} className="w-full h-full object-cover" />
+        {activeSlides.length > 0 && activeSlides.map((slide, index) => (
+          <Link to={slide?.redirectURL} key={`${slide?.redirectURL}-${index}`} className="slide absolute w-full h-full" style={{ left: `${(index - 1) * 100}%`, top: '0' }}>
+            <img src={slide?.posterImage} alt={slide?.posterAlt} className="w-full h-full object-cover" />
           </Link>
         ))}
 

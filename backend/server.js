@@ -30,6 +30,7 @@ import cors from 'cors';
 import mongoose from 'mongoose'; // 1. Import Mongoose
 
 import moviesRouter from './api/movies.js';
+import postersRouter from './api/posters.js';
 
 const app = express();
 app.use(cors());
@@ -49,6 +50,7 @@ mongoose.connect(MONGO_URI)
 
 // Routes
 app.use('/api/movies', moviesRouter);
+app.use('/api/posters', postersRouter);
 
 io.on('connection', (socket) => {
   console.log(`Client connected: ${socket.id}`);

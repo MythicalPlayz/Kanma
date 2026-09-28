@@ -32,6 +32,7 @@ import mongoose from 'mongoose'; // 1. Import Mongoose
 import moviesRouter from './api/movies.js';
 import postersRouter from './api/posters.js';
 import snacksRouter from './api/snacks.js';
+import supportRouter from './api/support.js';
 
 const app = express();
 app.use(cors());
@@ -53,6 +54,8 @@ mongoose.connect(MONGO_URI)
 app.use('/api/movies', moviesRouter);
 app.use('/api/posters', postersRouter);
 app.use('/api/snacks', snacksRouter);
+app.use('/api/support', supportRouter);
+
 io.on('connection', (socket) => {
   console.log(`Client connected: ${socket.id}`);
   socket.on('disconnect', () => console.log(`Client disconnected: ${socket.id}`));

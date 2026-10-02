@@ -34,6 +34,7 @@ import postersRouter from './api/posters.js';
 import snacksRouter from './api/snacks.js';
 import supportRouter from './api/support.js';
 import cinemasRouter from './api/cinemas.js';
+import accountRouter from './api/account.js';
 
 const app = express();
 app.use(cors());
@@ -57,6 +58,7 @@ app.use('/api/posters', postersRouter);
 app.use('/api/snacks', snacksRouter);
 app.use('/api/support', supportRouter);
 app.use('/api/cinemas', cinemasRouter);
+app.use('/api/account', accountRouter);
 
 io.on('connection', (socket) => {
   console.log(`Client connected: ${socket.id}`);

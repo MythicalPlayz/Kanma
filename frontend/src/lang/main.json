@@ -142,5 +142,97 @@
     "refundTDLR": {
         "en": "TL;DR: Tickets are refundable up to 30 minutes before showtime, provided they haven't been printed.",
         "ar": "باختصار: يمكن استرداد قيمة التذكرة حتى 30 دقيقة قبل موعد العرض، بشرط ألا تكون قد طُبعت"
+    },
+    "accountPage": {
+        "en": "The Perks of Kanma Cinemas",
+        "ar": "مزايا حساب سينما كانما"
+    },
+    "loginPage": {
+        "en": "Welcome back",
+        "ar": "مرحباً بعودتك"
+    },
+    "registerPage": {
+        "en": "Join the Kanma Cinemas membership",
+        "ar": "انضم إلى عضوية سينما كانما"
+    },
+    "verifyAccount": {
+        "en": "Verify Your Account",
+        "ar": "تحقق من حسابك"
+    },
+    "forgotPassword": {
+        "en": "Forgot Password",
+        "ar": "نسيت كلمة المرور"
+    },
+    "resetPassword": {
+        "en": "Reset Password",
+        "ar": "إعادة تعيين كلمة المرور"
+    },
+    "noAccount": {
+        "en": "Don't have an account?",
+        "ar": "ليس لديك حساب؟"
+    },
+    "haveAccount": {
+        "en": "Already have an account?",
+        "ar": "هل لديك حساب بالفعل؟"
+    },
+    "FName": {
+        "en": "First Name",
+        "ar": "الاسم الأول"
+    },
+    "LName": {
+        "en": "Last Name",
+        "ar": "الاسم الأخير"
+    },
+    "email": {
+        "en": "Email",
+        "ar": "البريد الإلكتروني"
+    },
+    "password": {
+        "en": "Password",
+        "ar": "كلمة المرور"
+    },
+    "telephone": {
+        "en": "Mobile Phone Number (Egyptian numbers only)",
+        "ar": "رقم الهاتف المحمول (أرقام مصرية فقط)"
+    },
+    "login": {
+        "en": "Login",
+        "ar": "تسجيل الدخول"
+    },
+    "profile": {
+        "en": "Profile",
+        "ar": "الملف الشخصي"
+    },
+    "telephoneNumber": {
+        "en": "Telephone Number",
+        "ar": "رقم الهاتف"
+    },
+    "logout": {
+        "en": "Logout",
+        "ar": "تسجيل الخروج"
+    },
+    "register": {
+        "en": "Register",
+        "ar": "تسجيل"
+    },
+    "code": {
+        "en": "Code",
+        "ar": "كود"
+    },
+    "codeEmail": {
+        "en": "A code has been sent to your email, use it to verify.",
+        "ar": "تم ارسال كود علي البريد الالكتروني الخاص بك، استخدمه للتحقق"
+    },
+    "verify": {
+        "en": "Verify",
+        "ar": "تحقق"
+    },
+    "forgotEmail" : {
+        "en": "Enter your email to reset your password.",
+        "ar": "ادخل بريدك الالكتروني لإعادة تعيين كلمة المرور"
+    },
+    "resetPasswordMessage" : {
+        "en": "Enter your new password.",
+        "ar": "ادخل كلمة المرور الجديدة"
     }
 }

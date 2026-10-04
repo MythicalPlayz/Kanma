@@ -14,6 +14,14 @@ import SupportPageFaq from './components/SupportPageFAQ/SupportPageFAQ';
 import SupportPageRefund from './components/SupportPageRefund/SupportPageRefund';
 import SnacksPage from './components/SnacksPage/SnacksPage';
 import CinemasPage from './components/CinemasPage/CinemasPage';
+import { UserProvider } from './contexts/AccountContext';
+import AccountPage from './components/AccountPage/AccountPage';
+import LoginComponent from './components/LoginComponent/LoginComponent';
+import ProfileComponent from './components/ProfileComponent/ProfileComponent';
+import RegisterComponent from './components/RegisterComponent/RegisterComponent';
+import VerifyComponent from './components/VerifyComponent/VerifyComponent';
+import ForgotPassComponent from './components/ForgotPassComponent/ForgotPassComponent';
+import ResetPassComponent from './components/ResetPassComponent/ResetPassComponent';
 
 function RootLayout() {
   return (
@@ -91,6 +99,36 @@ const router = createBrowserRouter([
         ]
       },
       {
+        path: "account",
+        element: <AccountPage />,
+        children: [
+          {
+            path: "profile",
+            element: <ProfileComponent />
+          },
+          {
+            path: "register",
+            element: <RegisterComponent />
+          },
+          {
+            path: "login",
+            element: <LoginComponent />
+          },
+          {
+            path: "verify",
+            element: <VerifyComponent />
+          },
+          {
+            path: "forgot-password",
+            element: <ForgotPassComponent />
+          },
+          {
+            path: "reset-password",
+            element: <ResetPassComponent />
+          }
+        ]
+      },
+      {
         path: '404',
         element: <E404 />,
       },
@@ -104,8 +142,10 @@ const router = createBrowserRouter([
 
 export default function App() {
   return (
+    <UserProvider>
     <LanguageProvider>
       <RouterProvider router={router} />
     </LanguageProvider>
+    </UserProvider>
   );
 }

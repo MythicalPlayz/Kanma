@@ -31,9 +31,10 @@ router.post('/register', async (req, res) => {
         await newAccount.save();
 
         // Create a 1 hour session token immediately upon registration
+        const expiresAtDate = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
         const session = await Session.create({
             accountId: newAccount._id,
-            expiresAt: new Date(Date.now() + 60 * 60 * 1000) // 60 * 60
+            expiresAt: expiresAtDate
         });
 
         res.status(201).json({
@@ -86,9 +87,11 @@ router.post('/login', async (req, res) => {
         }
 
         // check if there is already an active session for this account
+        const expiresAtDate = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000); // 3 days from now
+        const dateNow = new Date();
         const existingSession = await Session.findOne({
             accountId: account._id,
-            expiresAt: { $gt: new Date() }
+            expiresAt: { $gt: dateNow } // only consider active sessions
         });
         if (existingSession) {
             // delete the existing session to prevent multiple active sessions
@@ -98,7 +101,7 @@ router.post('/login', async (req, res) => {
         // Generate fresh session valid for 3 days
         const session = await Session.create({
             accountId: account._id,
-            expiresAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+            expiresAt: expiresAtDate
         });
 
         res.status(200).json({
@@ -191,14 +194,14 @@ router.post('/refresh', async (req, res) => {
 
     try {
         const newExpiresAt = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
-
+        const dateNow = new Date();
         const session = await Session.findOneAndUpdate(
             {
                 token,
-                expiresAt: { $gt: new Date() } // Can only refresh active, unexpired sessions
+                expiresAt: { $gt: dateNow } // Can only refresh active, unexpired sessions
             },
             { expiresAt: newExpiresAt },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         if (!session) {

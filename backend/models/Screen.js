@@ -23,9 +23,7 @@ const screenSchema = new mongoose.Schema({
     screenType: {
         type: String,
         required: true,
-        trim: true,
-        default: "std",
-        maxLength: 5
+        trim: true
     },
     nameEN: {
         type: String,
@@ -51,9 +49,36 @@ const screenSchema = new mongoose.Schema({
             ref: "SeatType"
         }
     }]
+}, {
+    timestamps: true,
+    toJSON: {
+        virtuals: true,
+        transform: (doc, ret) => {
+            if (ret.screenTypeDetails) {
+                ret.screenType = ret.screenTypeDetails;
+                delete ret.screenTypeDetails;
+            }
+            return ret;
+        }
+    },
+    toObject: {
+        virtuals: true,
+        transform: (doc, ret) => {
+            if (ret.screenTypeDetails) {
+                ret.screenType = ret.screenTypeDetails;
+                delete ret.screenTypeDetails;
+            }
+            return ret;
+        }
+    }
+});
 
-
-}, { timestamps: true });
+screenSchema.virtual('screenTypeDetails', {
+    ref: 'ScreenType',
+    localField: 'screenType',
+    foreignField: 'code',
+    justOne: true
+});
 
 const Screen = mongoose.model("Screen", screenSchema);
 

@@ -1,6 +1,7 @@
 import express from "express";
 import Cinema from "../models/Cinema.js";
 import Screen from "../models/Screen.js";
+import ScreenType from "../models/ScreenType.js";
 import Showtime from "../models/Showtime.js";
 import Movies from "../models/Movie.js";
 import Session from "../models/Session.js";
@@ -64,7 +65,7 @@ router.get('/', async (req, res) => {
         }
 
         const availableShowtimes = await Showtime.find(filter)
-            .sort({cinemaId: 1, movieId: 1, startTime: 1}) // Closest shows first
+            .sort({movieId: 1, cinemaId: 1, startTime: 1}) // Closest shows first
             .populate({
                 path: 'movieId',
                 model: 'Movie',
@@ -77,7 +78,11 @@ router.get('/', async (req, res) => {
                 model: 'Screen',
                 localField: 'screenId',
                 foreignField: 'code',
-                select: 'nameEN nameAR screenType code'
+                select: 'nameEN nameAR screenType code',
+                populate: {
+                    path: 'screenTypeDetails',
+                    select: 'code nameEN nameAR'
+                }
             })
             .populate({
                 path: 'cinemaId',

@@ -112,6 +112,7 @@ router.post("/book/", async (req, res) => {
 
         SeatShowTime.insertMany(seats.map(seat => ({
             bookingId: newBooking._id,
+            showtimeId: showtimeId,
             seatCode: seat.seatCode,
             seatType: seat.seatType,
             accountId: userId
@@ -150,6 +151,55 @@ router.post("/confirm/", async (req, res) => {
         await booking.save();
 
         res.json(booking);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// DELETE /api/bookings/cancel -- Deletes a booking for the authenticated user
+router.delete("/cancel/", async (req, res) => {
+    try {
+
+        const { bookingId } = req.body;
+
+        const isValid = await validateAccount(req);
+        if (!isValid) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+        const token = extractToken(req);
+        const session = await Session.findOne({ token });
+        const userId = session.accountId;
+
+        const booking = await Booking.findById(bookingId);
+        if (!booking) {
+            return res.status(404).json({ error: 'Booking not found' });
+        }
+
+        if (booking.userId !== userId) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+
+        // Check if the showtime has already started or 30 minutes before the showtime starts
+        const showtime = await Showtime.findById(booking.showtimeId);
+        if (!showtime) {
+            return res.status(404).json({ error: 'Showtime not found' });
+        }
+        const currentTime = new Date();
+        const thirtyMinutesBefore = new Date(showtime.startTime.getTime() - 30 * 60 * 1000);
+        if (currentTime >= showtime.startTime || currentTime >= thirtyMinutesBefore) {
+            return res.status(400).json({ error: 'Cannot delete booking for a showtime that has already started or is about to start' });
+        }
+
+        // instead of delete, we can mark the booking as canceled
+        booking.status = 'cancelled';
+        await booking.save();
+        // await Booking.findByIdAndDelete(req.params.id);
+
+        // Delete associated SeatShowTime entries
+        await SeatShowTime.deleteMany({ bookingId: bookingId });
+
+        res.json({ message: 'Booking deleted successfully' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });

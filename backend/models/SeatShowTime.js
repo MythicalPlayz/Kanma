@@ -7,6 +7,11 @@ const seatShowTimeSchema = new mongoose.Schema({
         trim: true,
         ref: "Booking"
     },
+    showtimeId: {
+        type: String,
+        trim: true,
+        ref: "Showtime"
+    },
     seatCode: {
         type: String,
         required: true,

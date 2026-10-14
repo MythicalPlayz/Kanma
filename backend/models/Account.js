@@ -19,7 +19,7 @@ const accountSchema = new mongoose.Schema({
     telephone: { type: String, required: true, unique: true, trim: true, match: phoneRegex },
     type: {
         type: String,
-        enum: ['guest', 'Staff', 'Admin'],
+        enum: ['guest', 'staff'],
         default: 'guest',
     },
     status: {

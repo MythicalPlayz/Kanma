@@ -118,7 +118,18 @@ router.post("/book/", async (req, res) => {
             accountId: userId
         })));
 
-        res.status(201).json(savedBooking);
+        res.status(201).json({savedBooking, timeLeft: 600});
+
+        const TIMEOUT_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
+        setTimeout(async () => {
+            const booking = await Booking.findById(savedBooking._id);
+            if (booking && booking.status === 'pending') {
+                booking.status = 'expired';
+                await booking.save();
+                await SeatShowTime.deleteMany({ bookingId: savedBooking._id });
+                console.log(`Booking ${savedBooking._id} has been automatically expired due to timeout.`);
+            }
+        }, TIMEOUT_DURATION);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });

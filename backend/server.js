@@ -28,7 +28,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
 import mongoose from 'mongoose'; // 1. Import Mongoose
-
+import { startBookingCleanupTask } from "./cleanup.js";
 import moviesRouter from './api/movies.js';
 import postersRouter from './api/posters.js';
 import snacksRouter from './api/snacks.js';
@@ -53,6 +53,8 @@ const MONGO_URI = 'mongodb://127.0.0.1:27017/kanmacinemas'; // Change cinemas_db
 
 mongoose.connect(MONGO_URI)
   .then(() => console.log(' Connected to MongoDB successfully!'))
+  .then(() => startBookingCleanupTask())
+  .then(() => console.log(' Booking cleanup task started.'))
   .catch((err) => console.error(' MongoDB connection error:', err.message));
 
 // Routes

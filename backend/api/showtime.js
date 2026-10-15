@@ -5,6 +5,7 @@ import ScreenType from "../models/ScreenType.js";
 import Showtime from "../models/Showtime.js";
 import Movies from "../models/Movie.js";
 import Session from "../models/Session.js";
+import SeatShowtime from "../models/SeatShowTime.js";
 const router = express.Router();
 
 const extractToken = (req) => {
@@ -95,6 +96,22 @@ router.get('/', async (req, res) => {
         res.json(availableShowtimes);
     } catch (error) {
         console.error('Error fetching available showtimes:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// GET /api/showtimes/bookedseats -- Returns a list of all booked seats for a specific showtime
+router.get('/bookedseats', async (req, res) => {
+    const { showtimeId } = req.body;
+    try {
+        const isValid = await validateAccount(req);
+        if (!isValid) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+        const bookedSeats = await SeatShowtime.find({ showtimeId });
+        res.json(bookedSeats);
+    } catch (error) {
+        console.error('Error fetching booked seats:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });

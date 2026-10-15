@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import crypto from 'crypto';
+import SeatShowTime from './SeatShowTime.js';
 
 const alphaNumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
@@ -27,7 +28,7 @@ const bookingSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'confirmed', 'cancelled'],
+        enum: ['pending', 'confirmed', 'cancelled', 'expired'],
         default: 'pending',
         required: true
     },
@@ -67,24 +68,6 @@ const bookingSchema = new mongoose.Schema({
         default: Date.now
     },
 }, { timestamps: true });
-
-
-
-bookingSchema.index(
-    { bookingTime: 1 },
-    {
-        expireAfterSeconds: 600,
-        partialFilterExpression: { status: 'pending' }
-    }
-);
-
-bookingSchema.pre(
-    "deleteOne",
-    { document: true, query: false },
-    async function () {
-        await mongoose.model("SeatShowTime").deleteMany({ bookingId: this._id, accountId: this.userId });
-    }
-);
 
 const Booking = mongoose.model('Booking', bookingSchema);
 

@@ -1,5 +1,6 @@
 import Booking from "./models/Booking.js";
 import SeatShowtime from "./models/SeatShowTime.js";
+import { getIO } from "./socket.js";
 
 // 1. Cleans up bookings that stayed 'pending' past the 10-minute timeout
 const cleanExpiredBookings = async () => {
@@ -21,10 +22,39 @@ const cleanExpiredBookings = async () => {
             { $set: { status: "expired" } }
         );
 
-        // Release the held seats
-        await SeatShowtime.deleteMany({
+
+
+        // 1. Find all seats linked to the expired bookings before removing them
+        const seatsToRelease = await SeatShowtime.find({
             bookingId: { $in: expiredIds },
-        });
+        }).select("showtimeId seatCode");
+
+        if (seatsToRelease.length > 0) {
+            // 2. Group seat codes by showtimeId
+            const seatsByShowtime = seatsToRelease.reduce((acc, seat) => {
+                const sId = seat.showtimeId.toString();
+                if (!acc[sId]) {
+                    acc[sId] = [];
+                }
+                acc[sId].push(seat.seatCode);
+                return acc;
+            }, {});
+
+            // 3. Emit the released seats to each specific showtime room
+            const io = getIO();
+            for (const [showtimeId, seatCodes] of Object.entries(seatsByShowtime)) {
+                io.to(`showtime_${showtimeId}`).emit("seats_updated", {
+                    action: "release",
+                    showtimeId,
+                    seats: seatCodes,
+                });
+            }
+
+            // 4. Delete the held seats from the database
+            await SeatShowtime.deleteMany({
+                bookingId: { $in: expiredIds },
+            });
+        }
 
         console.log(`[Clean] Expired ${expiredIds.length} expired booking(s) and released seats.`);
     } catch (error) {

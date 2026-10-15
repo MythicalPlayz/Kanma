@@ -66,7 +66,7 @@ router.get('/', async (req, res) => {
         }
 
         const availableShowtimes = await Showtime.find(filter)
-            .sort({movieId: 1, cinemaId: 1, startTime: 1}) // Closest shows first
+            .sort({ movieId: 1, cinemaId: 1, startTime: 1 }) // Closest shows first
             .populate({
                 path: 'movieId',
                 model: 'Movie',
@@ -115,5 +115,47 @@ router.get('/bookedseats', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+// GET /api/showtimes/:id - Returns a specific showtime by ID
+router.get('/:id', async (req, res) => {
+    try {
+        const isValid = await validateAccount(req);
+        if (!isValid) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+        const showtime = await Showtime.findById(req.params.id)
+            .populate({
+                path: 'movieId',
+                model: 'Movie',
+                localField: 'movieId',
+                foreignField: 'id',
+                select: 'titleEN titleAR posterURL id'
+            })
+            .populate({
+                path: 'screenId',
+                model: 'Screen',
+                localField: 'screenId',
+                foreignField: 'code',
+                select: 'nameEN nameAR screenType code',
+                populate: {
+                    path: 'screenTypeDetails',
+                    select: 'code nameEN nameAR seatLayout'
+                }
+            })
+            .populate({
+                path: 'cinemaId',
+                model: 'Cinema',
+                localField: 'cinemaId',
+                foreignField: 'id',
+                select: 'nameEN nameAR address id'
+            });
+
+        res.json(showtime);
+    } catch (error) {
+        console.error('Error fetching available showtimes:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 
 export default router;

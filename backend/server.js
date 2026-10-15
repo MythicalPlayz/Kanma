@@ -38,15 +38,14 @@ import accountRouter from './api/account.js';
 import showTimeRouter from './api/showtime.js';
 import screensRouter from './api/screens.js';
 import bookingRouter from './api/bookings.js';
+import {initSocket} from './socket.js';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 const httpServer = createServer(app);
-const io = new Server(httpServer, {
-  cors: { origin: 'http://localhost:5173' } // Vite dev URL
-});
+initSocket(httpServer); // Initialize Socket.io with the HTTP server
 
 // 2. Connect to MongoDB (using 127.0.0.1 to avoid IPv6 issues)
 const MONGO_URI = 'mongodb://127.0.0.1:27017/kanmacinemas'; // Change cinemas_db if your DB has another name
@@ -67,11 +66,6 @@ app.use('/api/account', accountRouter);
 app.use('/api/screens', screensRouter);
 app.use('/api/bookings', bookingRouter);
 app.use('/api/showtimes', showTimeRouter);
-
-io.on('connection', (socket) => {
-  console.log(`Client connected: ${socket.id}`);
-  socket.on('disconnect', () => console.log(`Client disconnected: ${socket.id}`));
-});
 
 const PORT = 4000;
 httpServer.listen(PORT, () => {

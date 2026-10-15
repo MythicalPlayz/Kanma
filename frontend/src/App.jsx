@@ -23,6 +23,7 @@ import VerifyComponent from './components/VerifyComponent/VerifyComponent';
 import ForgotPassComponent from './components/ForgotPassComponent/ForgotPassComponent';
 import ResetPassComponent from './components/ResetPassComponent/ResetPassComponent';
 import BookPage from './components/BookPage/BookPage';
+import ConfirmBookingPage from './components/ConfirmBookPage/ConfirmBookPage';
 
 function RootLayout() {
   return (
@@ -132,6 +133,10 @@ const router = createBrowserRouter([
       {
         path: 'book/:movieId',
         element: <BookPage />
+      },
+      {
+        path: 'confirm-booking/:showtimeId',
+        element: <ConfirmBookingPage />
       },
       {
         path: '404',

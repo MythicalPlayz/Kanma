@@ -38,7 +38,13 @@ import accountRouter from './api/account.js';
 import showTimeRouter from './api/showtime.js';
 import screensRouter from './api/screens.js';
 import bookingRouter from './api/bookings.js';
+import bankRouter from './bank/bank.js';
+import keyRouter from './api/auth.js';
 import {initSocket} from './socket.js';
+import { generateKeyPair } from './auth/auth.js';
+
+// Generate RSA key pair on server startup
+generateKeyPair();
 
 const app = express();
 app.use(cors());
@@ -66,7 +72,8 @@ app.use('/api/account', accountRouter);
 app.use('/api/screens', screensRouter);
 app.use('/api/bookings', bookingRouter);
 app.use('/api/showtimes', showTimeRouter);
-
+app.use('/api/auth', keyRouter);
+app.use('/bank', bankRouter);
 const PORT = 4000;
 httpServer.listen(PORT, () => {
   console.log(`Backend server ready at http://localhost:${PORT}`);

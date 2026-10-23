@@ -102,7 +102,7 @@ router.get('/', async (req, res) => {
 
 // GET /api/showtimes/bookedseats -- Returns a list of all booked seats for a specific showtime
 router.get('/bookedseats', async (req, res) => {
-    const { showtimeId } = req.body;
+    const { showtimeId } = req.query;
     try {
         const isValid = await validateAccount(req);
         if (!isValid) {

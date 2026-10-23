@@ -4,6 +4,7 @@ import Session from "../models/Session.js";
 import Booking from "../models/Booking.js";
 import SeatShowTime from "../models/SeatShowTime.js";
 import SeatType from "../models/SeatType.js";
+import { decryptData } from "../auth/auth.js";
 const router = express.Router();
 
 const extractToken = (req) => {
@@ -51,6 +52,9 @@ router.get('/', async (req, res) => {
     }
 });
 
+
+//// Encrypted booking endpoints
+
 // POST /api/bookings/book -- Creates a new booking for the authenticated user
 router.post("/book/", async (req, res) => {
     try {
@@ -62,7 +66,17 @@ router.post("/book/", async (req, res) => {
         const session = await Session.findOne({ token });
         const userId = session.accountId;
 
-        const { showtimeId, seats } = req.body;
+        const { raw } = req.body;
+        let decryptedData;
+        if (!raw) {
+            const encryptedData = req.body.encryptedData;
+            if (!encryptedData) {
+                return res.status(400).json({ error: 'Missing encrypted data' });
+            }
+            decryptedData = decryptData(encryptedData);
+        }
+
+        const { showtimeId, seats } = raw ? req.body : decryptedData;
 
         // seats would be an array containing each two values: seatCode and seatType, e.g. [{seatCode: "A1", seatType: "VIP"}, {seatCode: "A2", seatType: "VIP"}]
 
@@ -118,7 +132,7 @@ router.post("/book/", async (req, res) => {
             accountId: userId
         })));
 
-        res.status(201).json({savedBooking, timeLeft: 600});
+        res.status(201).json({ savedBooking, timeLeft: 600 });
 
         const TIMEOUT_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
         setTimeout(async () => {

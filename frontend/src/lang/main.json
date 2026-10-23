@@ -234,5 +234,29 @@
     "resetPasswordMessage" : {
         "en": "Enter your new password.",
         "ar": "ادخل كلمة المرور الجديدة"
+    },
+    "screen": {
+        "en": "Screen",
+        "ar": "الشاشة"
+    },
+    "selectSeats": {
+        "en": "Select Seats",
+        "ar": "اختر المقاعد"
+    },
+    "selectedSeats": {
+        "en": "Selected Seats",
+        "ar": "المقاعد المختارة"
+    },
+    "total": {
+        "en": "Total",
+        "ar": "الإجمالي"
+    },
+    "procedeToPayment": {
+        "en": "Proceed to Payment",
+        "ar": "المتابعة للدفع"
+    },
+    "steps": {
+        "en": "Step #STEP of 4",
+        "ar": "الخطوة #STEP من 4"
     }
 }

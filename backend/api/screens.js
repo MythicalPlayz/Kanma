@@ -3,6 +3,7 @@ import Cinema from "../models/Cinema.js";
 import Screen from "../models/Screen.js";
 import Showtime from "../models/Showtime.js";
 import ScreenType from "../models/ScreenType.js";
+import SeatType from "../models/SeatType.js";
 const router = express.Router();
 
 // GET /api/screens/cinema/:id - Returns a list of all screens in a specific cinema
@@ -48,11 +49,15 @@ router.get('/showtime/', async (req, res) => {
         if (!showtime) {
             return res.status(404).json({ error: 'Showtime not found' });
         }
-        const screen = await Screen.findOne({ code: showtime.screenId })
+        const screen = await Screen.findOne({ code: showtime.screenId });
         if (!screen) {
             return res.status(404).json({ error: 'Screen not found' });
         }
-        res.json(screen);
+        
+        let seatType = screen.seatLayout.map(row => row.seatType);
+        seatType = [new Set(seatType)];
+        const seatTypeDetails = await SeatType.find({ code: { $in: Array.from(seatType[0]) } });
+        res.json({screen, seatTypeDetails});
     }
     catch (err) {
         res.status(500).json({ error: err.message });

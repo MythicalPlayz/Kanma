@@ -67,6 +67,10 @@ const bookingSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    payCode: {
+        type: String,
+        default: null
+    }
 }, { timestamps: true });
 
 const Booking = mongoose.model('Booking', bookingSchema);

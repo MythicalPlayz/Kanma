@@ -258,5 +258,13 @@
     "steps": {
         "en": "Step #STEP of 4",
         "ar": "الخطوة #STEP من 4"
+    },
+    "payment": {
+        "en": "Payment",
+        "ar": "الدفع"
+    },
+    "payNow": {
+        "en": "Pay Now",
+        "ar": "ادفع الآن"
     }
 }

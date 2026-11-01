@@ -4,7 +4,9 @@ import Session from "../models/Session.js";
 import Booking from "../models/Booking.js";
 import SeatShowTime from "../models/SeatShowTime.js";
 import SeatType from "../models/SeatType.js";
-import { decryptData } from "../auth/auth.js";
+import crypto from "crypto";
+import { decryptData, encryptData, encryptDataWithKey, getPrivateKeyObject, getPublicKey, getPublicKeyObject } from "../auth/auth.js";
+
 const router = express.Router();
 
 const extractToken = (req) => {
@@ -115,11 +117,59 @@ router.post("/book/", async (req, res) => {
             totalPrice += seatType.price;
         }
 
+        // we need to create a paycode the bank would use to validate the payment
+
+
+        // first we get the public key fron the bank
+        const responseBankKey = await fetch('http://localhost:4000/bank/public-key');
+        const bKey = await responseBankKey.json();
+        const publicBankKey = bKey.publicKey;
+        // then we encrypt the data using it
+
+        const encryptedData =
+            encryptDataWithKey({
+                accountId: userId,
+                amount: totalPrice,
+                key: getPublicKey(),
+                postServerURL: "http://localhost:4000/api/bookings/confirm",
+            }, publicBankKey);
+
+        const response = await fetch('http://localhost:4000/bank/generate-paycode', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                encryptedData
+            })
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Error from bank:', errorText);
+            return res.status(500).json({ error: 'Failed to generate pay code from bank' });
+        }
+
+        const encryptedcodes = await response.json();
+        const serverPayCode = encryptedcodes.payCode;
+        const buffer = Buffer.from(serverPayCode, 'base64');
+        // lets get the payCode from the bank and decrypt it using our private key
+        const paycodeString = crypto.privateDecrypt(
+            {
+                key: getPrivateKeyObject(),
+                padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+                oaepHash: 'sha256'
+            },
+            buffer
+        ).toString('utf8');
+        const paycode = JSON.parse(paycodeString).payCode;
+
+
+
         const newBooking = new Booking({
             showtimeId,
             userId,
             seats,
-            price: totalPrice
+            price: totalPrice,
+            payCode: paycode
         });
 
         const savedBooking = await newBooking.save();
@@ -132,7 +182,7 @@ router.post("/book/", async (req, res) => {
             accountId: userId
         })));
 
-        res.status(201).json({ savedBooking, timeLeft: 600 });
+        res.status(201).json({ timeLeft: 600, userPayCode: encryptedcodes.userPayCode });
 
         const TIMEOUT_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
         setTimeout(async () => {

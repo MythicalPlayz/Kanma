@@ -313,7 +313,7 @@ export default function ConfirmBookPage() {
     return true;
   };
 
-  const handleInput = (e) => {
+  const handleCardInput = (e) => {
     const target = e.target;
     const maxLength = parseInt(target.getAttribute("maxlength"), 10);
 
@@ -363,6 +363,51 @@ export default function ConfirmBookPage() {
       // If you want to flag it instantly if incomplete, handle accordingly
     }
   };
+
+  const handleOTPInput = (e) => {
+    const target = e.target;
+    target.value = target.value.replace(/\D/g, '');
+    if (target.value.length == 6) {
+      // focus on submit button
+      e.target.form.querySelector('button').focus();
+    }
+  };
+
+  const handleOTPSubmit = async (e) => {
+    e.preventDefault();
+    const otp = document.getElementById('otp').value;
+    if (otp.length !== 6) {
+      console.log('OTP must be 6 digits');
+      return;
+    }
+    const otpData = {
+      otp: otp,
+      payCode: payCode
+    };
+    const encryptOTPData = await encryptDataWithKey(otpData, bankPublicKey);
+    console.log('Encrypted OTP data:', encryptOTPData);
+    
+    // TODO: Send the encrypted OTP data to the bank for verification
+    setLoading(true);
+
+    const response = await fetch('http://localhost:4000/bank/otp', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ encryptedData: encryptOTPData })
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      console.error('OTP verification failed:', data);
+      setError(true);
+      setLoading(false);
+      return;
+    }
+    setLoading(false);
+    console.log('OTP verification successful:', data);
+    setSteps(4); // Move to confirmation step
+  }
 
   // Form submission guard (optional final validation check)
   const handlePaymentSubmit = async (e) => {
@@ -450,7 +495,7 @@ export default function ConfirmBookPage() {
       {loading && <LoadingElement />}
       {error && <ErrorElement />}
       <h2 className="text-2xl font-bold">{translations.steps[lang].replace('#STEP', steps)}</h2>
-      {steps === 1 && screenDetails && (<div className="w-full lg:w-1/2 flex flex-col items-center justify-center gap-8 bg-secondary p-8 rounded-lg shadow-lg">
+      {steps === 1 && screenDetails && (<div className="w-full lg:w-3/4 flex flex-col items-center justify-center gap-8 bg-secondary p-8 rounded-lg shadow-lg">
         <h2 className="text-xl font-bold">{translations.selectSeats[lang]}</h2>
         <div className="w-full flex flex-col items-center justify-center gap-4">
           <div className="flex bg-black w-full h-8 justify-center items-center">
@@ -512,31 +557,51 @@ export default function ConfirmBookPage() {
           {translations.procedeToPayment[lang]}
         </button>)}
       </div>)}
-      {steps === 2 && screenDetails && (<div className="w-full lg:w-1/2 flex flex-col items-center justify-center gap-8 bg-secondary p-8 rounded-lg shadow-lg">
+      {steps === 2 && screenDetails && (<div className="w-full lg:w-3/4 flex flex-col items-center justify-center gap-8 bg-secondary p-8 rounded-lg shadow-lg">
         <h2 className="text-xl font-bold">{translations.payment[lang]}</h2>
         <div className="w-full h-1 bg-gray-300"></div>
         <form id="paymentForm" onSubmit={handlePaymentSubmit} className="w-full flex flex-col items-start justify-center gap-4 px-4">
           <h4>Card Number</h4>
           {cardError == 1 && <p className="text-red-500">Card number is invalid</p>}
           <div className="w-full grid grid-cols-4 gap-2">
-            <input onInput={handleInput} id='num0' type="text" placeholder="1234" maxLength={4} minLength={4} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
-            <input onInput={handleInput} id='num1' type="text" placeholder="5678" maxLength={4} minLength={4} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
-            <input onInput={handleInput} id='num2' type="text" placeholder="9012" maxLength={4} minLength={4} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
-            <input onInput={handleInput} id='num3' type="text" placeholder="3456" maxLength={4} minLength={4} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
+            <input onInput={handleCardInput} id='num0' type="text" placeholder="1234" maxLength={4} minLength={4} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
+            <input onInput={handleCardInput} id='num1' type="text" placeholder="5678" maxLength={4} minLength={4} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
+            <input onInput={handleCardInput} id='num2' type="text" placeholder="9012" maxLength={4} minLength={4} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
+            <input onInput={handleCardInput} id='num3' type="text" placeholder="3456" maxLength={4} minLength={4} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
           </div>
           <h4>Expiry Date (MM/YY)</h4>
           {cardError == 2 && <p className="text-red-500">Expiry date is invalid</p>}
           <div className="w-full grid grid-cols-2 gap-2">
-            <input onInput={handleInput} id='expMonth' type="text" placeholder="MM" maxLength={2} minLength={2} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
-            <input onInput={handleInput} id='expYear' type="text" placeholder="YY" maxLength={2} minLength={2} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
+            <input onInput={handleCardInput} id='expMonth' type="text" placeholder="MM" maxLength={2} minLength={2} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
+            <input onInput={handleCardInput} id='expYear' type="text" placeholder="YY" maxLength={2} minLength={2} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
           </div>
           <h4>CVV</h4>
           {cardError == 3 && <p className="text-red-500">CVV is invalid</p>}
-          <input onInput={handleInput} id='cvv' type="text" placeholder="123" maxLength={3} minLength={3} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
+          <input onInput={handleCardInput} id='cvv' type="text" placeholder="123" maxLength={3} minLength={3} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
           <button type="submit" disabled={cardError !== 0} className="bg-tertiary w-full text-white px-4 py-2 rounded hover:bg-primary-dark hover:cursor-pointer hover:scale-110 transition-all duration-500 ease-in-out">
             {translations.payNow[lang]}
           </button>
         </form>
+      </div>)}
+      {steps === 3 && screenDetails && (<div className="w-full lg:w-3/4 flex flex-col items-center justify-center gap-8 bg-secondary p-8 rounded-lg shadow-lg">
+        <h3>OTP</h3>
+        <div className="w-full bg-white text-black p-4 flex flex-col justify-center items-start gap-4">
+          <div className='w-full flex'>
+            <h4 className="text-blue-700 font-bold text-4xl">Myth. Banks</h4>
+          </div>
+          <div className="flex w-full flex-col justify-center items-center gap-4">
+            <h4>Merchant: Kanma Cinemas</h4>
+            <h4>Amount: {seatPrices.total} EGP</h4>
+            <h4>OTP Code has been sent to your registered mobile number.</h4>
+            <h4>Enter the OTP code below:</h4>
+          </div>
+          <form id="otpForm" onSubmit={handleOTPSubmit} className="w-full flex flex-col items-start justify-center gap-4 px-4">
+            <input type="text" id="otp" minLength={6} maxLength={6} placeholder="123456" className="bg-gray-200 text-center text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" onInput={handleOTPInput} />
+            <button type="submit" className="bg-tertiary w-full text-white px-4 py-2 rounded hover:bg-primary-dark hover:cursor-pointer hover:scale-110 transition-all duration-500 ease-in-out">
+              Send OTP
+            </button>
+          </form>
+        </div>
       </div>)}
     </div>);
 }

@@ -203,29 +203,51 @@ router.post("/book/", async (req, res) => {
 // POST /api/bookings/confirm -- Confirms a booking for the authenticated user
 router.post("/confirm/", async (req, res) => {
     try {
-        const isValid = await validateAccount(req);
-        if (!isValid) {
-            return res.status(401).json({ error: 'Unauthorized' });
+
+        const {encryptedData} = req.body;
+        if (!encryptedData) {
+            return res.status(400).json({ error: 'Missing encryptedData' });
         }
-        const token = extractToken(req);
-        const session = await Session.findOne({ token });
-        const userId = session.accountId;
 
-        const { bookingId } = req.body;
+        const decryptedData = await crypto.privateDecrypt(
+            {
+                key: getPrivateKeyObject(),
+                padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+                oaepHash: 'sha256'
+            },
+            Buffer.from(encryptedData, 'base64')
+        ).toString('utf8');
 
-        const booking = await Booking.findById(bookingId);
+        const decryptedPayCode = JSON.parse(decryptedData).payCode;
+
+
+
+
+        // const isValid = await validateAccount(req);
+        // if (!isValid) {
+        //     return res.status(401).json({ error: 'Unauthorized' });
+        // }
+        // const token = extractToken(req);
+        // const session = await Session.findOne({ token });
+        // const userId = session.accountId;
+
+        // const { bookingId } = req.body;
+
+        // const booking = await Booking.findById(bookingId);
+
+        const booking = await Booking.findOne({ payCode: decryptedPayCode });
         if (!booking) {
             return res.status(404).json({ error: 'Booking not found' });
         }
 
-        if (booking.userId !== userId) {
-            return res.status(403).json({ error: 'Forbidden' });
-        }
+        // if (booking.userId !== userId) {
+        //     return res.status(403).json({ error: 'Forbidden' });
+        // }
 
         booking.status = 'confirmed';
         await booking.save();
 
-        res.json(booking);
+        res.status(200).json({ message: 'Booking confirmed successfully' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });

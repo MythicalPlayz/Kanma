@@ -302,7 +302,7 @@ router.post("/payment", (req, res) => {
 });
 
 // POST /bank/otp -- Accepts encrypted otp data, decrypts it, checks the otp, return 200 if valid
-router.post("/otp", (req, res) => {
+router.post("/otp", async (req, res) => {
     const { encryptedData } = req.body;
     const decryptedData = decryptData(encryptedData);
     if (!decryptedData) {
@@ -315,6 +315,50 @@ router.post("/otp", (req, res) => {
     if (otp !== "123456") { // Simulate OTP check
         return res.status(400).json({ error: 'Invalid OTP' });
     }
+    const decryptedPayCodeString = crypto.privateDecrypt(
+        {
+            key: privateKeyObject,
+            padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+            oaepHash: 'sha256'
+        },
+        Buffer.from(payCode, 'base64')
+    ).toString('utf8');
+    const decryptedPayCode = JSON.parse(decryptedPayCodeString).payCode;
+    const paymentSession = paymentSessions.find((session) => session.payCode === decryptedPayCode);
+    if (!paymentSession) {
+        return res.status(400).json({ error: 'Invalid payCode' });
+    }
+    // if (paymentSession.expiresAt < Date.now()) {
+    //     return res.status(400).json({ error: 'PayCode has expired' });
+    // }
+    
+
+    // now we contact the server to confirm the payment using the postServerURL and the serverKey
+    const encryptedPayCodeForServer = crypto.publicEncrypt(
+        {
+            key: crypto.createPublicKey({
+                key: paymentSession.serverKey,
+                format: 'jwk',
+                type: 'pkcs1'
+            }),
+            padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+            oaepHash: 'sha256'
+        },
+        Buffer.from(JSON.stringify({ payCode: decryptedPayCode }), 'utf8')
+    ).toString('base64');
+
+    const response = await fetch(paymentSession.postServerURL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ encryptedData: encryptedPayCodeForServer })
+    });
+
+    if (!response.ok) {
+        return res.status(400).json({ error: 'Failed to confirm payment with server' });
+    }
+
     // If OTP is valid, return 200 OK
     return res.status(200).json({ message: 'OTP verified successfully' });
 });

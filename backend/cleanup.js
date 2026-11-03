@@ -66,20 +66,42 @@ const cleanExpiredBookings = async () => {
 const cleanOrphanSeats = async () => {
     try {
         const orphanSeats = await SeatShowtime.aggregate([
+            // Step 1: Skip seats that don't have any bookingId assigned yet
+            {
+                $match: {
+                    bookingId: { $ne: null, $exists: true, $ne: "" }
+                }
+            },
+            // Step 2: Use a pipeline lookup to convert Booking's ObjectId to a String for comparison
             {
                 $lookup: {
-                    from: "bookings", // The actual MongoDB collection name for bookings
-                    localField: "bookingId",
-                    foreignField: "_id",
+                    from: "bookings",
+                    let: { bookingRef: "$bookingId" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $eq: [
+                                        { $toString: "$_id" }, // Convert Booking ObjectId to String
+                                        "$$bookingRef"         // Compare against SeatShowtime's string bookingId
+                                    ]
+                                }
+                            }
+                        }
+                    ],
                     as: "matchedBooking",
                 },
             },
+            // Step 3: Delete if the booking doesn't exist OR its status is cancelled/expired
             {
-                // Keep only entries where the joined array is empty (no booking found)
                 $match: {
-                    matchedBooking: { $size: 0 },
+                    $or: [
+                        { matchedBooking: { $size: 0 } },
+                        { "matchedBooking.status": { $in: ["cancelled", "expired"] } }
+                    ],
                 },
-            }, {
+            },
+            {
                 $project: { _id: 1 },
             },
         ]);
@@ -90,7 +112,7 @@ const cleanOrphanSeats = async () => {
 
         await SeatShowtime.deleteMany({ _id: { $in: orphanIds } });
 
-        console.log(`[Clean] Removed ${orphanIds.length} orphaned seat reservation(s).`);
+        console.log(`[Clean] Removed ${orphanIds.length} orphaned or inactive seat reservation(s).`);
     } catch (error) {
         console.error("[Clean] Error during orphan seats cleanup:", error);
     }

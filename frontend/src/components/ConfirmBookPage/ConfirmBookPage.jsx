@@ -7,6 +7,8 @@ import { getAccountContext } from '../../contexts/AccountContext';
 import translations from '../../lang/main.json';
 import LoadingElement from '../LoadingElement/LoadingElement';
 import ErrorElement from '../ErrorElement/ErrorElement';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 const seatColor = {
   N: 'bg-blue-500', // Normal
@@ -30,6 +32,7 @@ export default function ConfirmBookPage() {
   const [serverPublicKey, setServerPublicKey] = useState(null);
   const [cardError, setCardError] = useState(0);
   const [payCode, setPayCode] = useState(null);
+  const [bookingId, setBookingId] = useState(null);
 
   const fetchScreenDetails = async (showtimeId) => {
     if (!accessToken) {
@@ -276,6 +279,7 @@ export default function ConfirmBookPage() {
       console.log('Booking created successfully:', data);
       // Move to the next step (Payment)
       setSteps(2);
+      setBookingId(data.bookingId);
       setPayCode(data.userPayCode); // Store the payCode for later use in payment
     }
     catch (error) {
@@ -406,7 +410,7 @@ export default function ConfirmBookPage() {
     }
     setLoading(false);
     console.log('OTP verification successful:', data);
-    setSteps(4); // Move to confirmation step
+    checkBookingStatus();
   }
 
   // Form submission guard (optional final validation check)
@@ -478,7 +482,7 @@ export default function ConfirmBookPage() {
       if (response.status === 200) {
         const data = await response.json();
         console.log('Payment successful:', data);
-        setSteps(4); // Move to confirmation step
+        checkBookingStatus();
       }
       else if (response.status === 201) {
         const data = await response.json();
@@ -486,6 +490,36 @@ export default function ConfirmBookPage() {
         setSteps(3); // Move to OTP step
       }
       setLoading(false);
+    }
+  };
+
+  const isBookingConfirmed = async () => {
+    try {
+      setLoading(true);
+      setError(false);
+      const response = await fetch(`http://localhost:4000/api/bookings/booking?bookingId=${bookingId}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+      });
+      const data = await response.json();
+      console.log('Booking status:', data);
+      setLoading(false);
+      return data.status === 'confirmed';
+    } catch (error) {
+      console.error('Error checking booking status:', error);
+      setError(true);
+      setLoading(false);
+      return null;
+    }
+  };
+
+  const checkBookingStatus = async () => {
+    const isConfirmed = await isBookingConfirmed();
+    if (isConfirmed) {
+      setLoading(false);
+      setError(false);
+      setSteps(4); // Move to confirmation step
     }
   };
 
@@ -602,6 +636,14 @@ export default function ConfirmBookPage() {
             </button>
           </form>
         </div>
+      </div>)}
+      {steps === 4 && screenDetails && (<div className="w-full lg:w-3/4 flex flex-col items-center justify-center gap-8 bg-secondary p-8 rounded-lg shadow-lg">
+        <div className="bg-green-500 w-16 h-16 rounded-full flex justify-center items-center">
+          <FontAwesomeIcon icon={faCheck} className="text-white text-2xl font-black" />
+        </div>
+        <h3>Booking Confirmed!</h3>
+        <h3>Your booking has been successfully confirmed. Enjoy your movie!</h3>
+        <h4>Redirecting to your booking details...</h4>
       </div>)}
     </div>);
 }

@@ -182,7 +182,9 @@ router.post("/book/", async (req, res) => {
             accountId: userId
         })));
 
-        res.status(201).json({ timeLeft: 600, userPayCode: encryptedcodes.userPayCode });
+        // Get the id of new booking and send it to the frontend along with the payCode
+        const bookingId = savedBooking._id;
+        res.status(201).json({ timeLeft: 600, userPayCode: encryptedcodes.userPayCode, bookingId: bookingId });
 
         const TIMEOUT_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
         setTimeout(async () => {
@@ -253,6 +255,36 @@ router.post("/confirm/", async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+// GET /api/bookings/booking?bookingId=id -- Gets a specific booking for the authenticated user
+router.get('/booking/', async (req, res) => {
+    try {
+        const { bookingId } = req.query;
+
+        const isValid = await validateAccount(req);
+        if (!isValid) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+        const token = extractToken(req);
+        const session = await Session.findOne({ token });
+        const userId = session.accountId;
+
+        const booking = await Booking.findById(bookingId);
+        if (!booking) {
+            return res.status(404).json({ error: 'Booking not found' });
+        }
+
+        if (booking.userId !== userId) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+
+        res.json(booking);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 // DELETE /api/bookings/cancel -- Deletes a booking for the authenticated user
 router.delete("/cancel/", async (req, res) => {

@@ -28,6 +28,7 @@ const validateAccount = async (req) => {
 // GET /api/bookings -- Gets all bookings for the authenticated user
 router.get('/', async (req, res) => {
     try {
+        const { showExpired } = req.query;
         const isValid = await validateAccount(req);
         if (!isValid) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -36,7 +37,7 @@ router.get('/', async (req, res) => {
         const session = await Session.findOne({ token });
         const userId = session.accountId;
 
-        const bookings = await Booking.find({ userId })
+        const bookings = await Booking.find({ userId, ...(showExpired === 'true' ? {} : { status: { $ne: 'expired' } }) })
             .populate({
                 path: 'showtimeId',
                 model: 'Showtime',
@@ -46,7 +47,7 @@ router.get('/', async (req, res) => {
                     { path: 'movie', select: 'titleEN titleAR posterURL id' }
                 ]
             })
-            .sort({ createdAt: -1 });
+            .sort({ createdAt: -1 })
         res.json(bookings);
     } catch (error) {
         console.error(error);

@@ -41,9 +41,9 @@ export default function MovieCover({ titleEn, titleAr, poster, ageRating, langua
           </h4>
 
           {isBookable && (
-            <div className="w-full bg-tertiary py-2 rounded-md font-bold text-white flex justify-center items-center hover:bg-tertiary/80 transition-all duration-300">
+            <Link to={`/book/${movieId}`} className="w-full bg-tertiary py-2 rounded-md font-bold text-white flex justify-center items-center hover:bg-tertiary/80 transition-all duration-300">
               <p>{translations.bookNow[lang]}</p>
-            </div>
+            </Link>
           )}
         </div>
       </div>

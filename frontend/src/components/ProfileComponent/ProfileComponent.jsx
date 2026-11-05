@@ -3,7 +3,7 @@ import styles from './ProfileComponent.module.css';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { getAccountContext } from '../../contexts/AccountContext';
 import translations from '../../lang/main.json';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function ProfileComponent() {
 
@@ -97,6 +97,9 @@ export default function ProfileComponent() {
               <p className="text-white text-xl">{account.user.telephone}</p>
             </div>
         </div>
+        <Link to="/account/bookings" className="text-white bg-tertiary py-2 px-4 rounded-md hover:bg-tertiary/80 transition duration-300 w-full text-center">
+          {translations.viewBookings[lang]}
+        </Link>
         <button className="text-white bg-red-500 py-2 px-4 rounded-md hover:bg-secondary transition duration-300 w-full" onClick={logout}>
           {translations.logout[lang]}
         </button>

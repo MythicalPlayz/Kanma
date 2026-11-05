@@ -24,6 +24,8 @@ import ForgotPassComponent from './components/ForgotPassComponent/ForgotPassComp
 import ResetPassComponent from './components/ResetPassComponent/ResetPassComponent';
 import BookPage from './components/BookPage/BookPage';
 import ConfirmBookingPage from './components/ConfirmBookPage/ConfirmBookPage';
+import BookingsPage from './components/BookingsPage/BookingsPage';
+import SelectedBookingPage from './components/SelectedBookingPage/SelectedBookingPage';
 
 function RootLayout() {
   return (
@@ -129,6 +131,14 @@ const router = createBrowserRouter([
             element: <ResetPassComponent />
           }
         ]
+      },
+      {
+        path: 'account/bookings',
+        element: <BookingsPage />
+      },
+      {
+        path: 'account/bookings/:bookingId',
+        element: <SelectedBookingPage />
       },
       {
         path: 'book/:movieId',

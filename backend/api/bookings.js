@@ -38,15 +38,6 @@ router.get('/', async (req, res) => {
         const userId = session.accountId;
 
         const bookings = await Booking.find({ userId, ...(showExpired === 'true' ? {} : { status: { $ne: 'expired' } }) })
-            .populate({
-                path: 'showtimeId',
-                model: 'Showtime',
-                select: 'cinemaId movieId screenId startTime',
-                populate: [
-                    { path: 'screen', select: 'nameEN nameAR screenType code' },
-                    { path: 'movie', select: 'titleEN titleAR posterURL id' }
-                ]
-            })
             .sort({ createdAt: -1 })
         res.json(bookings);
     } catch (error) {
@@ -207,7 +198,7 @@ router.post("/book/", async (req, res) => {
 router.post("/confirm/", async (req, res) => {
     try {
 
-        const {encryptedData} = req.body;
+        const { encryptedData } = req.body;
         if (!encryptedData) {
             return res.status(400).json({ error: 'Missing encryptedData' });
         }

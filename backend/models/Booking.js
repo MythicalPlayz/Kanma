@@ -71,7 +71,18 @@ const bookingSchema = new mongoose.Schema({
         type: String,
         default: null
     }
-}, { timestamps: true });
+}, { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } });
+
+bookingSchema.virtual('showtime', {
+    ref: 'Showtime',
+    localField: 'showtimeId',
+    foreignField: '_id',
+    justOne: true
+});
+
+bookingSchema.pre(/^find/, function () {
+    this.populate('showtime');
+});
 
 const Booking = mongoose.model('Booking', bookingSchema);
 

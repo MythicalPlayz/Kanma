@@ -39,5 +39,18 @@ showtimeSchema.virtual('movie', {
     justOne: true
 });
 
+showtimeSchema.virtual('cinema', {
+    ref: 'Cinema',
+    localField: 'cinemaId',
+    foreignField: 'id',
+    justOne: true
+});
+
+showtimeSchema.pre(/^find/, function () {
+    this.populate('screen');
+    this.populate('movie');
+    this.populate('cinema');
+});
+
 const Showtime = mongoose.model('Showtime', showtimeSchema);
 export default Showtime;

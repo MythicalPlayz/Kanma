@@ -49,35 +49,17 @@ const screenSchema = new mongoose.Schema({
             ref: "SeatType"
         }
     }]
-}, {
-    timestamps: true,
-    toJSON: {
-        virtuals: true,
-        transform: (doc, ret) => {
-            if (ret.screenTypeDetails) {
-                ret.screenType = ret.screenTypeDetails;
-                delete ret.screenTypeDetails;
-            }
-            return ret;
-        }
-    },
-    toObject: {
-        virtuals: true,
-        transform: (doc, ret) => {
-            if (ret.screenTypeDetails) {
-                ret.screenType = ret.screenTypeDetails;
-                delete ret.screenTypeDetails;
-            }
-            return ret;
-        }
-    }
+}, {timestamps: true,toJSON: {virtuals: true},toObject: {virtuals: true}});
+
+screenSchema.virtual('cinema', {
+    ref: 'Cinema',
+    localField: 'cinemaId',
+    foreignField: 'id',       
+    justOne: true
 });
 
-screenSchema.virtual('screenTypeDetails', {
-    ref: 'ScreenType',
-    localField: 'screenType',
-    foreignField: 'code',
-    justOne: true
+screenSchema.pre(/^find/, function () {
+    this.populate('cinema');
 });
 
 const Screen = mongoose.model("Screen", screenSchema);

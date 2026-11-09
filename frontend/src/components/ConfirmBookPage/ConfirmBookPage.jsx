@@ -25,9 +25,14 @@ export default function ConfirmBookPage() {
   const [seatPrices, setSeatPrices] = useState({});
   const [bankPublicKey, setBankPublicKey] = useState(null);
   const [serverPublicKey, setServerPublicKey] = useState(null);
-  const [cardError, setCardError] = useState(0);
   const [payCode, setPayCode] = useState(null);
   const [bookingId, setBookingId] = useState(null);
+
+  const [cardError, setCardError] = useState({
+    validDigits: true,
+    validExpiry: true,
+    validCVV: true
+  });
 
   const fetchScreenDetails = async (showtimeId) => {
     if (!accessToken) {
@@ -339,9 +344,9 @@ export default function ConfirmBookPage() {
     if (num0.length === 4 && num1.length === 4 && num2.length === 4 && num3.length === 4) {
       const fullCardNumber = num0 + num1 + num2 + num3;
       if (!validateLuhn(fullCardNumber)) {
-        setCardError(1);
+        setCardError({ ...cardError, validDigits: false });
       } else {
-        setCardError(0); // Clear error if valid
+        setCardError({ ...cardError, validDigits: true });
       }
     }
 
@@ -351,9 +356,9 @@ export default function ConfirmBookPage() {
 
     if (expMonth.length === 2 && expYear.length === 2) {
       if (!validateExpiry(expMonth, expYear)) {
-        setCardError(2);
+        setCardError({ ...cardError, validExpiry: false });
       } else {
-        setCardError(0);
+        setCardError({ ...cardError, validExpiry: true });
       }
     }
 
@@ -361,6 +366,7 @@ export default function ConfirmBookPage() {
     const cvv = document.getElementById('cvv').value;
     if (cvv.length === 3) {
       // Optional immediate check or wait for submit
+      setCardError({ ...cardError, validCVV: true });
       // If you want to flag it instantly if incomplete, handle accordingly
     }
   };
@@ -415,10 +421,11 @@ export default function ConfirmBookPage() {
     e.preventDefault();
     const cvv = document.getElementById('cvv').value;
     if (cvv.length !== 3) {
-      setCardError(3);
+      setCardError({ ...cardError, validCVV: false });
       return;
     }
-    if (cardError !== 0) {
+    setCardError({ ...cardError, validCVV: true });
+    if (cardError.validCVV === false || cardError.validDigits === false || cardError.validExpiry === false) {
       console.log('Cannot submit, card details are invalid');
       return;
     }
@@ -434,15 +441,15 @@ export default function ConfirmBookPage() {
 
     // check that all info is correct
     if (card.digits.length !== 16 || !validateLuhn(card.digits)) {
-      setCardError(1);
+      setCardError({ ...cardError, validDigits: false });
       return;
     }
     if (!validateExpiry(card.expirationMonth, card.expirationYear)) {
-      setCardError(2);
+      setCardError({ ...cardError, validExpiry: false });
       return;
     }
     if (card.cvv.length !== 3) {
-      setCardError(3);
+      setCardError({ ...cardError, validCVV: false });
       return;
     }
 
@@ -591,44 +598,43 @@ export default function ConfirmBookPage() {
         <h2 className="text-xl font-bold">{translations.payment[lang]}</h2>
         <div className="w-full h-1 bg-gray-300"></div>
         <form id="paymentForm" onSubmit={handlePaymentSubmit} className="w-full flex flex-col items-start justify-center gap-4 px-4">
-          <h4>Card Number</h4>
-          {cardError == 1 && <p className="text-red-500">Card number is invalid</p>}
+          <h4>{translations.cardNumber[lang]}</h4>
+          {cardError.validDigits === false && <p className="text-red-500">{translations.cardErrors.invalidCardNumber[lang]}</p>}
           <div className="w-full grid grid-cols-4 gap-2">
             <input onInput={handleCardInput} id='num0' type="text" placeholder="1234" maxLength={4} minLength={4} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
             <input onInput={handleCardInput} id='num1' type="text" placeholder="5678" maxLength={4} minLength={4} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
             <input onInput={handleCardInput} id='num2' type="text" placeholder="9012" maxLength={4} minLength={4} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
             <input onInput={handleCardInput} id='num3' type="text" placeholder="3456" maxLength={4} minLength={4} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
           </div>
-          <h4>Expiry Date (MM/YY)</h4>
-          {cardError == 2 && <p className="text-red-500">Expiry date is invalid</p>}
+          <h4>{translations.expiryDate[lang]} (MM/YY)</h4>
+          {cardError.validExpiry === false && <p className="text-red-500">{translations.cardErrors.invalidExpiryDate[lang]}</p>}
           <div className="w-full grid grid-cols-2 gap-2">
             <input onInput={handleCardInput} id='expMonth' type="text" placeholder="MM" maxLength={2} minLength={2} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
             <input onInput={handleCardInput} id='expYear' type="text" placeholder="YY" maxLength={2} minLength={2} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
           </div>
-          <h4>CVV</h4>
-          {cardError == 3 && <p className="text-red-500">CVV is invalid</p>}
+          <h4>{translations.cvv[lang]}</h4>
+          {cardError.validCVV === false && <p className="text-red-500">{translations.cardErrors.invalidCVV[lang]}</p>}
           <input onInput={handleCardInput} id='cvv' type="text" placeholder="123" maxLength={3} minLength={3} className="bg-gray-200 text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" />
-          <button type="submit" disabled={cardError !== 0} className="bg-tertiary w-full text-white px-4 py-2 rounded hover:bg-primary-dark hover:cursor-pointer hover:scale-110 transition-all duration-500 ease-in-out">
+          <button type="submit" disabled={cardError.validCVV === false || cardError.validDigits === false || cardError.validExpiry === false} className="bg-tertiary w-full text-white px-4 py-2 rounded hover:bg-primary-dark hover:cursor-pointer hover:scale-110 transition-all duration-500 ease-in-out">
             {translations.payNow[lang]}
           </button>
         </form>
       </div>)}
       {steps === 3 && screenDetails && (<div className="w-full lg:w-3/4 flex flex-col items-center justify-center gap-8 bg-secondary p-8 rounded-lg shadow-lg">
-        <h3>OTP</h3>
+        <h3>{translations.otpPage.title[lang]}</h3>
         <div className="w-full bg-white text-black p-4 flex flex-col justify-center items-start gap-4">
           <div className='w-full flex'>
             <h4 className="text-blue-700 font-bold text-4xl">Myth. Banks</h4>
           </div>
           <div className="flex w-full flex-col justify-center items-center gap-4">
-            <h4>Merchant: Kanma Cinemas</h4>
-            <h4>Amount: {seatPrices.total} EGP</h4>
-            <h4>OTP Code has been sent to your registered mobile number.</h4>
-            <h4>Enter the OTP code below:</h4>
+            <h4>{translations.otpPage.merchantName[lang]}</h4>
+            <h4>{translations.otpPage.amount[lang].replace('#AMOUNT', seatPrices.total)}</h4>
+            <h4>{translations.otpPage.enterOTP[lang]}</h4>
           </div>
           <form id="otpForm" onSubmit={handleOTPSubmit} className="w-full flex flex-col items-start justify-center gap-4 px-4">
             <input type="text" id="otp" minLength={6} maxLength={6} placeholder="123456" className="bg-gray-200 text-center text-gray-700 placeholder:text-gray-500 border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" onInput={handleOTPInput} />
             <button type="submit" className="bg-tertiary w-full text-white px-4 py-2 rounded hover:bg-primary-dark hover:cursor-pointer hover:scale-110 transition-all duration-500 ease-in-out">
-              Send OTP
+              {translations.otpPage.sendOTP[lang]}
             </button>
           </form>
         </div>
@@ -637,9 +643,9 @@ export default function ConfirmBookPage() {
         <div className="bg-green-500 w-16 h-16 rounded-full flex justify-center items-center">
           <FontAwesomeIcon icon={faCheck} className="text-white text-2xl font-black" />
         </div>
-        <h3>Booking Confirmed!</h3>
-        <h3>Your booking has been successfully confirmed. Enjoy your movie!</h3>
-        <h4>Redirecting to your booking details...</h4>
+        <h3>{translations.bookingComplete.title[lang]}</h3>
+        <h3>{translations.bookingComplete.message[lang]}</h3>
+        <h4>{translations.bookingComplete.redirect[lang]}</h4>
       </div>)}
     </div>);
 }

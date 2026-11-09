@@ -270,5 +270,75 @@
     "viewBookings": {
         "en": "View Bookings",
         "ar": "عرض الحجوزات"
+    },
+    "cardNumber": {
+        "en": "Card Number",
+        "ar": "رقم البطاقة"
+    },
+    "expiryDate": {
+        "en": "Expiry Date (MM/YY)",
+        "ar": "تاريخ الانتهاء (MM/YY)"
+    },
+    "cvv": {
+        "en": "CVV",
+        "ar": "CVV"
+    },
+    "cardErrors": {
+        "invalidCardNumber": {
+            "en": "Invalid card number",
+            "ar": "رقم البطاقة غير صالح"
+        },
+        "invalidExpiryDate": {
+            "en": "Invalid expiry date",
+            "ar": "تاريخ الانتهاء غير صالح"
+        },
+        "invalidCVV": {
+            "en": "Invalid CVV",
+            "ar": "CVV غير صالح"
+        }
+    },
+    "otpPage": {
+        "title":
+        {
+            "en": "OTP",
+            "ar": "OTP"
+        },
+        "merchantName":
+        {
+            "en": "Merchant: Kanma Cinemas",
+            "ar": "البائع: سينما كانما"
+        },
+        "amount":
+        {
+            "en": "Amount: EGP #AMOUNT",
+            "ar": "المبلغ: #AMOUNT جنيه مصري"
+        },
+        "enterOTP":
+        {
+            "en": "Enter the OTP sent to your phone.",
+            "ar": "ادخل OTP المرسل إلى هاتفك."
+        },
+        "sendOTP":
+        {
+            "en": "Send OTP",
+            "ar": "إرسال OTP"
+        }
+    },
+    "bookingComplete": {
+        "title":
+        {
+            "en": "Booking Completed!",
+            "ar": "اكتملت الحجز"
+        },
+        "message":
+        {
+            "en": "Your booking has been successfully confirmed. Enjoy your movie!",
+            "ar": "تم إكمال حجزك بنجاح. استمتع بمشاهدتك!"
+        },
+        "redirect":
+        {
+            "en": "You will be redirected shortly",
+            "ar": "سيتم إعادة توجيهك قريبًا"
+        }
     }
 }

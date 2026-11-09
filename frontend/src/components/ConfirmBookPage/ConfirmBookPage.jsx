@@ -10,11 +10,6 @@ import ErrorElement from '../ErrorElement/ErrorElement';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
-const seatColor = {
-  N: 'bg-blue-500', // Normal
-  P: 'bg-green-500', // Premium
-}
-
 export default function ConfirmBookPage() {
   const { showtimeId } = useParams();
   const [steps, setSteps] = useState(1);
@@ -140,7 +135,8 @@ export default function ConfirmBookPage() {
       formattedDetails[type.code] = {
         nameEN: type.nameEN,
         nameAR: type.nameAR,
-        price: type.price
+        price: type.price,
+        color: type.seatColor || 'bg-gray-500'
       };
     });
     setSeatTypeDetails(formattedDetails);
@@ -153,6 +149,7 @@ export default function ConfirmBookPage() {
     };
     selectedSeats.forEach(seat => {
       const seatType = seat.seatType;
+      const seatColor = seatTypeDetails[seatType]?.color || 'bg-gray-500';
       const seatPrice = seatTypeDetails[seatType]?.price || 0;
       if (!prices.tickets[seatType]) {
         prices.tickets[seatType] = 0;
@@ -547,13 +544,12 @@ export default function ConfirmBookPage() {
                     .reduce((sum, count) => sum + count, 0);
 
                   const seatType = row.seatType;
-
                   return (
                     <div key={blockIndex} className="flex gap-2">
                       {Array.from({ length: seats }).map((_, seatIdx) => {
                         const seatNumber = startNumber + seatIdx + 1;
                         const seatCode = `${rowLetter}${seatNumber}`;
-                        const seatClass = seatColor[seatType] || 'bg-gray-500';
+                        const seatClass = seatTypeDetails[seatType]?.color || 'bg-gray-500';
                         const isSelected = selectedSeats.some(seat => seat.seatCode === seatCode);
                         const seatClassName = isSelected ? 'bg-green-500' : seatClass;
 

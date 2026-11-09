@@ -25,6 +25,12 @@ const seatTypeSchema = new mongoose.Schema({
         required: true,
         default: 0,
         min: 0
+    },
+    "seatColor": { // Use Tailwind CSS
+        type: String,
+        required: true,
+        trim: true,
+        default: "bg-blue-500",
     }
 }, { timestamps: true });
 

@@ -108,39 +108,45 @@ export default function BookPage() {
 
 
       // first create a movie id
-      if (!formattedData[showtime.movieId.id]) {
-        formattedData[showtime.movieId.id] = {
-          titleEN: showtime.movieId.titleEN,
-          titleAR: showtime.movieId.titleAR,
-          posterURL: showtime.movieId.posterURL,
+      if (!formattedData[showtime.movie.id]) {
+        formattedData[showtime.movie.id] = {
+          titleEN: showtime.movie.titleEN,
+          titleAR: showtime.movie.titleAR,
+          posterURL: showtime.movie.posterURL,
           cinemas: {}
         };
       }
 
       // create a cinema id
-      if (!formattedData[showtime.movieId.id].cinemas[showtime.cinemaId.id]) {
-        formattedData[showtime.movieId.id].cinemas[showtime.cinemaId.id] = {
-          nameEN: showtime.cinemaId.nameEN,
-          nameAR: showtime.cinemaId.nameAR,
+      if (!formattedData[showtime.movie.id].cinemas[showtime.cinema.id]) {
+        formattedData[showtime.movie.id].cinemas[showtime.cinema.id] = {
+          nameEN: showtime.cinema.nameEN,
+          nameAR: showtime.cinema.nameAR,
           types: {}
         };
       }
 
+      console.log(formattedData)
+      console.log(showtime)
+
       // create a screen type
-      if (!formattedData[showtime.movieId.id].cinemas[showtime.cinemaId.id].types[showtime.screenId?.screenType.code]) {
-        formattedData[showtime.movieId.id].cinemas[showtime.cinemaId.id].types[showtime.screenId?.screenType.code] = {
-          id: showtime.screenId?.screenType.code,
-          nameEN: showtime.screenId?.screenType.nameEN,
-          nameAR: showtime.screenId?.screenType.nameAR,
+      if (!formattedData[showtime.movie.id].cinemas[showtime.cinema.id].types[showtime.screen?.type.code]) {
+        formattedData[showtime.movie.id].cinemas[showtime.cinema.id].types[showtime.screen?.type.code] = {
+          id: showtime.screen?.type.code,
+          nameEN: showtime.screen?.type.nameEN,
+          nameAR: showtime.screen?.type.nameAR,
           dates: [],
           ids: []
         };
       }
 
+      console.log(formattedData)
+
       // push the showtime to the dates array
-      formattedData[showtime.movieId.id].cinemas[showtime.cinemaId.id].types[showtime.screenId?.screenType.code].dates.push(showtime.startTime);
-      formattedData[showtime.movieId.id].cinemas[showtime.cinemaId.id].types[showtime.screenId?.screenType.code].ids.push(showtime.id);
+      formattedData[showtime.movie.id].cinemas[showtime.cinema.id].types[showtime.screen?.type.code].dates.push(showtime.startTime);
+      formattedData[showtime.movie.id].cinemas[showtime.cinema.id].types[showtime.screen?.type.code].ids.push(showtime.id);
     };
+
 
     setShowtimes(formattedData);
     console.log('Formatted showtimes:', formattedData);
@@ -180,8 +186,8 @@ export default function BookPage() {
     <div className="min-h-screen flex flex-col items-center lg:items-start w-5/6 lg:w-3/4 mx-auto justify-center lg:justify-start p-8">
       <h2 className="text-4xl font-bold mb-4">We are happy to have you here!</h2>
       <div className="w-full grid grid-cols-7 gap-4 my-8">
-        {loading && <LoadingElement/>}
-        {error && <ErrorElement/>}
+        {loading && <LoadingElement />}
+        {error && <ErrorElement />}
         {dates.map((date, index) => (
           <button
             key={index}

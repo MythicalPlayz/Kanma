@@ -23,7 +23,8 @@ const screenSchema = new mongoose.Schema({
     screenType: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        ref: "ScreenType",
     },
     nameEN: {
         type: String,
@@ -58,8 +59,16 @@ screenSchema.virtual('cinema', {
     justOne: true
 });
 
+screenSchema.virtual('type', {
+    ref: 'ScreenType',
+    localField: 'screenType',
+    foreignField: 'code',
+    justOne: true
+});
+
 screenSchema.pre(/^find/, function () {
     this.populate('cinema');
+    this.populate('type');
 });
 
 const Screen = mongoose.model("Screen", screenSchema);

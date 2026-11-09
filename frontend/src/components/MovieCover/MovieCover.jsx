@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './MovieCover.module.css';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import translations from '../../lang/main.json';
 import { useLanguage } from '../../contexts/LanguageContext';
 
@@ -41,9 +41,9 @@ export default function MovieCover({ titleEn, titleAr, poster, ageRating, langua
           </h4>
 
           {isBookable && (
-            <Link to={`/book/${movieId}`} className="w-full bg-tertiary py-2 rounded-md font-bold text-white flex justify-center items-center hover:bg-tertiary/80 transition-all duration-300">
+            <div className="w-full bg-tertiary py-2 rounded-md font-bold text-white flex justify-center items-center hover:bg-tertiary/80 transition-all duration-300">
               <p>{translations.bookNow[lang]}</p>
-            </Link>
+            </div>
           )}
         </div>
       </div>

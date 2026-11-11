@@ -315,8 +315,6 @@ router.delete("/cancel/", async (req, res) => {
         // instead of delete, we can mark the booking as canceled
         booking.status = 'cancelled';
         await booking.save();
-        // await Booking.findByIdAndDelete(req.params.id);
-
         // Delete associated SeatShowTime entries
         await SeatShowTime.deleteMany({ bookingId: bookingId });
 
@@ -327,4 +325,28 @@ router.delete("/cancel/", async (req, res) => {
     }
 });
 
-export default router;
+// GET /api/bookings/active -- Checks if the authenticated user has an active booking
+router.get('/active/', async (req, res) => {
+    try {
+        const isValid = await validateAccount(req);
+        if (!isValid) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+
+        const token = extractToken(req);
+        const session = await Session.findOne({ token });
+        const userId = session.accountId;
+
+        const activeBooking = await Booking.findOne({ userId, status: 'pending' }).sort({ createdAt: -1 });
+        if (!activeBooking) {
+            return res.status(404).json({ error: 'No active booking found' });
+        }
+        res.json(activeBooking);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+    export default router;

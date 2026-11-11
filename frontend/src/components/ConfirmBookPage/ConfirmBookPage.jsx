@@ -295,6 +295,13 @@ export default function ConfirmBookPage() {
   useEffect(() => {
     let interval;
     if (timer > 0) {
+
+      // if step = 4 then stop the timer, user already finished
+      if (steps === 4) {
+        clearInterval(interval);
+        return;
+      }
+
       interval = setInterval(() => {
         setTimer(prevTimer => prevTimer - 1);
       }, 1000);
@@ -617,12 +624,12 @@ export default function ConfirmBookPage() {
           {translations.procedeToPayment[lang]}
         </button>)}
       </div>)}
-      {timer > 0 && steps !== 1 &&
+      {timer > 0 && steps !== 1 && steps !== 4 &&
         <div className="absolute top-4 lg:top-20 right-4 bg-gray-800 text-white p-2 rounded">
           {parseInt(timer / 60)}:{(timer % 60).toString().padStart(2, '0')}
         </div>
       }
-      {timer === 0 && steps !== 1 &&
+      {timer === 0 && steps !== 1 && steps !== 4 &&
         <div className='absolute top-0 left-0 right-0 bottom-0 bg-gray-800/80 flex justify-center items-center'>
           <div className='bg-secondary rounded-2xl p-8 flex flex-col justify-center items-center'>
             <p className='text-white text-lg'>{translations.bookingComplete.expired[lang]}</p>

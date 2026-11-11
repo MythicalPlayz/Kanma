@@ -27,6 +27,7 @@ export default function ConfirmBookPage() {
   const [serverPublicKey, setServerPublicKey] = useState(null);
   const [payCode, setPayCode] = useState(null);
   const [bookingId, setBookingId] = useState(null);
+  const [timer, setTimer] = useState(0);
 
   const [cardError, setCardError] = useState({
     validDigits: true,
@@ -283,11 +284,33 @@ export default function ConfirmBookPage() {
       setSteps(2);
       setBookingId(data.bookingId);
       setPayCode(data.userPayCode); // Store the payCode for later use in payment
+      setTimer(data.timeLeft);
     }
     catch (error) {
       console.error('Error creating booking:', error);
     }
   };
+
+  // 2. Timer
+  useEffect(() => {
+    let interval;
+    if (timer > 0) {
+      interval = setInterval(() => {
+        setTimer(prevTimer => prevTimer - 1);
+      }, 1000);
+    } else if (timer === 0 && steps !== 1) {
+      console.log('Booking time expired, redirecting to home page');
+      // wait 5 seconds and refresh the page
+      setInterval(() => {
+        window.location.reload();
+      }, 5000);
+    }
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [timer, steps]);
 
   // 3. Luhn Algorithm for Card Number Verification
   const validateLuhn = (digits) => {
@@ -393,7 +416,7 @@ export default function ConfirmBookPage() {
     };
     const encryptOTPData = await encryptDataWithKey(otpData, bankPublicKey);
     console.log('Encrypted OTP data:', encryptOTPData);
-    
+
     // TODO: Send the encrypted OTP data to the bank for verification
     setLoading(true);
 
@@ -594,6 +617,19 @@ export default function ConfirmBookPage() {
           {translations.procedeToPayment[lang]}
         </button>)}
       </div>)}
+      {timer > 0 && steps !== 1 &&
+        <div className="absolute top-4 lg:top-20 right-4 bg-gray-800 text-white p-2 rounded">
+          {parseInt(timer / 60)}:{(timer % 60).toString().padStart(2, '0')}
+        </div>
+      }
+      {timer === 0 && steps !== 1 &&
+        <div className='absolute top-0 left-0 right-0 bottom-0 bg-gray-800/80 flex justify-center items-center'>
+          <div className='bg-secondary rounded-2xl p-8 flex flex-col justify-center items-center'>
+            <p className='text-white text-lg'>{translations.bookingComplete.expired[lang]}</p>
+            <p className='text-white text-lg'>{translations.bookingComplete.redirect[lang]}</p>
+          </div>
+        </div>
+      }
       {steps === 2 && screenDetails && (<div className="w-full lg:w-3/4 flex flex-col items-center justify-center gap-8 bg-secondary p-8 rounded-lg shadow-lg">
         <h2 className="text-xl font-bold">{translations.payment[lang]}</h2>
         <div className="w-full h-1 bg-gray-300"></div>

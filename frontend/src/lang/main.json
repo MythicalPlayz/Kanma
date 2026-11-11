@@ -339,6 +339,11 @@
         {
             "en": "You will be redirected shortly",
             "ar": "سيتم إعادة توجيهك قريبًا"
+        },
+        "expired":
+        {
+            "en": "Your booking has expired",
+            "ar": "انتهت صلاحية حجزك"
         }
     }
 }

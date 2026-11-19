@@ -345,5 +345,12 @@
             "en": "Your booking has expired",
             "ar": "انتهت صلاحية حجزك"
         }
+    },
+    "activeBooking": {
+        "message":
+        {
+            "en": "You have a pending booking! Click here to continue.",
+            "ar": "لديك حجز معلق! انقر هنا للمتابعة."
+        }
     }
 }

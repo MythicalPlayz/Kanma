@@ -11,6 +11,8 @@ export default function ActiveBookingRedirect() {
 
   const { accessToken } = getAccountContext();
 
+  const { lang } = useLanguage();
+
   const fetchActiveBooking = async () => {
     try {
       const response = await fetch('http://localhost:4000/api/bookings/active', {
@@ -42,7 +44,7 @@ export default function ActiveBookingRedirect() {
     <>
     {activeBooking !== null && (
       <Link to={`/confirm-booking/${activeBooking.showtimeId}?active=${activeBooking.id}`} className="w-full bg-tertiary p-8 rounded-lg text-white flex items-center justify-center gap-4">
-        <h4 className="text-lg font-semibold">You have a pending booking! Click here to continue.</h4>
+        <h4 className="text-lg font-semibold">{translations.activeBooking.message[lang]}</h4>
       </Link>
     )}
     </>

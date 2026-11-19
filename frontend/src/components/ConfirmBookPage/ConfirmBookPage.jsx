@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './ConfirmBookPage.module.css';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { getAccountContext } from '../../contexts/AccountContext';
@@ -12,6 +12,8 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 export default function ConfirmBookPage() {
   const { showtimeId } = useParams();
+  const [searchParams] = useSearchParams();
+  const activeBooking = searchParams.get('active');
   const [steps, setSteps] = useState(1);
   const [screenDetails, setScreenDetails] = useState(null);
   const { lang } = useLanguage();
@@ -114,9 +116,63 @@ export default function ConfirmBookPage() {
     }
   };
 
+  const fetchActiveBooking = async () => {
+    if (!accessToken) {
+      console.log('No access token found, redirecting to login page');
+      navigateTo('/account/login');
+      return;
+    }
+    try {
+      setLoading(true);
+      setError(false);
+      const response = await fetch(`http://localhost:4000/api/bookings/active`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        },
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to fetch active booking');
+      }
+      console.log('Fetched active booking:', data);
+
+      setSteps(2);
+      setBookingId(data.id);
+      setPayCode(data.payCode);
+
+      const createdAt = new Date(data.createdAt);
+      const now = new Date();
+      const timeElapsed = Math.floor((now - createdAt) / 1000);
+      
+
+      setTimer(600 - timeElapsed); // 10 minutes countdown
+      setSeatPrices({total: data.price, tickets: data.tickets});
+
+
+    } catch (error) {
+      console.error('Error fetching active booking:', error);
+      if (error.response && error.response.status === 401) {
+        console.log('Unauthorized access, redirecting to login page');
+        navigateTo('/account/login');
+      }
+      setError(true);
+    }
+    finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    fetchScreenDetails(showtimeId);
     setPublicKeys();
+    if (activeBooking) {
+      fetchScreenDetails(showtimeId);
+      fetchActiveBooking();
+    }
+
+    else {
+      fetchScreenDetails(showtimeId);
+    }
   }, [showtimeId]);
 
   const handleSeatClick = (seatCode, seatType) => {
@@ -283,7 +339,7 @@ export default function ConfirmBookPage() {
       // Move to the next step (Payment)
       setSteps(2);
       setBookingId(data.bookingId);
-      setPayCode(data.userPayCode); // Store the payCode for later use in payment
+      setPayCode(data.userPayCode);
       setTimer(data.timeLeft);
     }
     catch (error) {

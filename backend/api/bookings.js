@@ -341,6 +341,26 @@ router.get('/active/', async (req, res) => {
         if (!activeBooking) {
             return res.status(404).json({ error: 'No active booking found' });
         }
+
+        // we send the user an encrypted version of pay code using the bank's public key so that the user can use it to pay for the booking
+        const responseBankKey = await fetch('http://localhost:4000/bank/public-key');
+        const bKey = await responseBankKey.json();
+        const publicBankKey = bKey.publicKey;
+
+        const encryptedData = crypto.publicEncrypt(
+            {
+                key: crypto.createPublicKey({
+                    key: publicBankKey,
+                    format: 'jwk'
+                }),
+                padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+                oaepHash: 'sha256'
+            },
+            Buffer.from(JSON.stringify({ payCode: activeBooking.payCode }))
+        ).toString('base64');
+
+        activeBooking.payCode = encryptedData;
+
         res.json(activeBooking);
 
     } catch (error) {

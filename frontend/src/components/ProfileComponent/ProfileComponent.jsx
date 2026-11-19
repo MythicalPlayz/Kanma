@@ -4,6 +4,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 import { getAccountContext } from '../../contexts/AccountContext';
 import translations from '../../lang/main.json';
 import { Link, useNavigate } from 'react-router-dom';
+import ActiveBookingRedirect from '../ActiveBookingRedirect/ActiveBookingRedirect';
 
 export default function ProfileComponent() {
 
@@ -77,6 +78,8 @@ export default function ProfileComponent() {
 
   const { lang } = useLanguage();
   return (
+    <div className="w-full p-8 rounded-lg text-white flex flex-col items-center justify-center gap-4">
+    <ActiveBookingRedirect/>
     <div className="max-w-7xl lg:w-3/4 w-5/6  mx-auto flex flex-col justify-start items-center gap-4 py-8 min-h-screen">
         <div className="flex flex-col justify-start items-center bg-secondary p-8 gap-8 rounded-md w-full">
             <h2 className="text-3xl font-bold mb-4 w-full text-center">{translations.profile[lang]}</h2>
@@ -103,6 +106,7 @@ export default function ProfileComponent() {
         <button className="text-white bg-red-500 py-2 px-4 rounded-md hover:bg-secondary transition duration-300 w-full" onClick={logout}>
           {translations.logout[lang]}
         </button>
+    </div>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import LoadingElement from '../LoadingElement/LoadingElement';
 import ErrorElement from '../ErrorElement/ErrorElement';
 import { faClock, faDisplay, faLocationArrow, faLocationDot, faTicket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 export default function BookingsPage() {
 
@@ -39,11 +40,32 @@ export default function BookingsPage() {
     }
   };
 
+  const { lang } = useLanguage();
+
   useEffect(() => {
     if (accessToken) {
       fetchBookings();
     }
   }, [accessToken]);
+
+
+  const bookStatus = {
+    "pending": {
+      "en": "Pending",
+      "ar": "قيد الانتظار",
+      "color": "bg-yellow-500"
+    },
+    "confirmed": {
+      "en": "Confirmed",
+      "ar": "تم التأكيد",
+      "color": "bg-green-500"
+    },
+    "cancelled": {
+      "en": "Cancelled",
+      "ar": "ملغى",
+      "color": "bg-red-500"
+    },
+  }
 
   return (
     <div className='p-8 min-h-screen flex flex-col justify-start items-center gap-8'>
@@ -62,21 +84,21 @@ export default function BookingsPage() {
           >
             <div className='flex flex-row justify-start items-center gap-4'>
               <FontAwesomeIcon icon={faTicket} className='text-2xl' />
-              <p className="font-bold">{booking.showtimeId.movie.titleEN}</p>
+              <p className="font-bold">{(lang === 'en' ? booking.showtime.movie.titleEN : booking.showtime.movie.titleAR)}</p>
             </div>
             <div className='flex flex-row justify-start items-center gap-4'>
               <FontAwesomeIcon icon={faDisplay} className='text-2xl' />
-              <p className="font-bold">{booking.showtimeId.screen.nameEN}</p>
+              <p className="font-bold">{(lang === 'en' ? booking.showtime.screen.nameEN : booking.showtime.screen.nameAR)}</p>
             </div>
             <div className='flex flex-row justify-start items-center gap-4'>
               <FontAwesomeIcon icon={faLocationDot} className='text-2xl' />
-              <p className="font-bold">{booking.showtimeId.screen.nameEN}</p>
+              <p className="font-bold">{(lang === 'en' ? booking.showtime.cinema.nameEN : booking.showtime.cinema.nameAR)}</p>
             </div>
             <div className='flex flex-row justify-start items-center gap-4'>
               <FontAwesomeIcon icon={faClock} className='text-2xl' />
-              <p className="font-bold">{new Date(booking.showtimeId.startTime).toLocaleString()}</p>
+              <p className="font-bold">{new Date(booking.showtime.startTime).toLocaleString(lang === 'en' ? 'en-UK' : 'ar-EG')}</p>
             </div>
-            <p className='absolute right-2 top-2 bg-green-500 p-2 rounded-full'>{(booking.status).toUpperCase()}</p>
+            <p className={`absolute ${lang === 'en' ? 'right-2' : 'left-2'} top-2 ${bookStatus[booking.status].color} p-2 rounded-full uppercase`}>{bookStatus[booking.status][lang]}</p>
           </Link>
         ))}
       </div>

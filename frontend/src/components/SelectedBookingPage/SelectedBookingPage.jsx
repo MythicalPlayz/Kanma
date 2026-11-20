@@ -87,7 +87,7 @@ export default function SelectedBookingPage() {
 
   const handleCancelBooking = async () => {
     // first use the builtin confirm dialog to ask the user if they are sure they want to cancel the booking
-    const confirmCancel = window.confirm("Are you sure you want to cancel this booking? This action cannot be undone.");
+    const confirmCancel = window.confirm(translations.ticketInfo.cancelBookingConfirm[lang]);
     if (!confirmCancel) {
       return;
     }
@@ -108,10 +108,10 @@ export default function SelectedBookingPage() {
         throw new Error(data.message || 'Failed to cancel booking');
       }
       console.log('Booking cancelled:', data);
-      alert('Booking cancelled successfully');
+      alert(translations.ticketInfo.cancelBookingSuccess[lang]);
 
       // refresh the booking info to reflect the cancelled status
-      fetchBookingInfo();
+      await fetchBookingInfo();
     } catch (error) {
       console.error('Error cancelling booking:', error);
       setError(true);
@@ -126,7 +126,7 @@ export default function SelectedBookingPage() {
       <h3 className="text-3xl font-bold">{translations.ticketInfo.title[lang]}</h3>
       {loading && <LoadingElement />}
       {error && <ErrorElement />}
-      {bookingInfo && (<div className="w-full p-8 gap-8 grid grid-cols-1 lg:grid-cols-2">
+      {bookingInfo && (<div className={`w-full p-8 gap-8 grid grid-cols-1 ${bookingInfo.status === "confirmed" ? "lg:grid-cols-2" : "lg:grid-cols-1"}`}>
         {bookingInfo.status === "confirmed" && (<div className='w-full justify-center items-center flex flex-col gap-4'>
           <ReactQRCode value={bookingInfo.code} background="white"
             dataModulesSettings={{

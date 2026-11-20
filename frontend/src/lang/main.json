@@ -403,6 +403,16 @@
         {
             "en": "Cancel Booking",
             "ar": "إلغاء الحجز"
+        },
+        "cancelBookingConfirm":
+        {
+            "en": "Are you sure you want to cancel this booking? This action cannot be undone.",
+            "ar": "هل أنت متأكد أنك تريد إلغاء هذا الحجز؟ لا يمكن التراجع عن هذا الإجراء."
+        },
+        "cancelBookingSuccess":
+        {
+            "en": "Your booking has been successfully canceled.  You should receive a refund within 5-7 business days.",
+            "ar": "تم إلغاء حجزك بنجاح. يجب أن تتلقى استردادًا خلال 5-7 أيام عمل."
         }
     }
 }

@@ -9,7 +9,7 @@ import LoadingElement from '../LoadingElement/LoadingElement';
 import ErrorElement from '../ErrorElement/ErrorElement';
 import { ReactQRCode } from '@lglab/react-qr-code'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleInfo, faClock, faCouch, faDisplay, faLocationDot, faTicket } from '@fortawesome/free-solid-svg-icons';
+import { faCircleInfo, faClock, faCouch, faDisplay, faLocationDot, faMoneyBill, faTicket } from '@fortawesome/free-solid-svg-icons';
 
 export default function SelectedBookingPage() {
 
@@ -87,7 +87,7 @@ export default function SelectedBookingPage() {
 
   return (
     <div className="w-full min-h-screen flex flex-col items-start justify-start gap-8 p-8">
-      <h3 className="text-3xl font-bold">Booking Info</h3>
+      <h3 className="text-3xl font-bold">{translations.ticketInfo.title[lang]}</h3>
       {loading && <LoadingElement />}
       {error && <ErrorElement />}
       {bookingInfo && (<div className="w-full p-8 gap-8 grid grid-cols-1 lg:grid-cols-2">
@@ -100,7 +100,7 @@ export default function SelectedBookingPage() {
               style: "outpoint-lg"
             }}
             finderPatternInnerSettings={{
-              // style: "star"
+              style: "rounded"
             }}
             imageSettings={{
               src: bookingInfo.showtime.cinema.imageURL,
@@ -119,10 +119,10 @@ export default function SelectedBookingPage() {
           />
         </div>)}
         <div className='bg-tertiary p-8 rounded-2xl flex flex-col justify-start items-start gap-4 w-full'>
-          <h4 className="text-3xl font-bold text-center w-full">Ticket Info</h4>
+          <h4 className="text-3xl font-bold text-center w-full">{translations.ticketInfo.title[lang]}</h4>
           <div className='flex items-center gap-2'>
             <FontAwesomeIcon icon={faCouch} size="2x" />
-            <h4 className="text-xl">{bookingInfo.seats.length === 1 ? "Seat:" : "Seats:"}</h4>
+            <h4 className="text-xl">{bookingInfo.seats.length === 1 ? translations.ticketInfo.seat1[lang] : translations.ticketInfo.seat2[lang]}</h4>
           </div>
 
           <div className="flex flex-row gap-4 w-full flex-wrap">
@@ -134,7 +134,7 @@ export default function SelectedBookingPage() {
           <div className='flex justify-between w-full items-center gap-2'>
             <div className='flex items-center gap-2'>
               <FontAwesomeIcon icon={faCircleInfo} size="2x" />
-              <h4 className="text-xl">Status:</h4>
+              <h4 className="text-xl">{translations.ticketInfo.status[lang]}</h4>
             </div>
             <p className={`text-lg p-2 font-bold rounded-full ${bookStatus[bookingInfo.status].color}`}>{bookStatus[bookingInfo.status][lang]}</p>
           </div>
@@ -142,33 +142,41 @@ export default function SelectedBookingPage() {
           <div className='flex justify-between w-full items-center gap-2'>
             <div className='flex items-center gap-2'>
               <FontAwesomeIcon icon={faTicket} size="2x" />
-              <h4 className="text-xl">Movie:</h4>
+              <h4 className="text-xl">{translations.ticketInfo.movie[lang]}</h4>
             </div>
-            <p className={`text-lg`}>{bookingInfo.showtime.movie.titleEN}</p>
+            <p className={`text-lg`}>{lang === 'en' ? bookingInfo.showtime.movie.titleEN : bookingInfo.showtime.movie.titleAR}</p>
           </div>
 
           <div className='flex justify-between w-full items-center gap-2'>
             <div className='flex items-center gap-2'>
               <FontAwesomeIcon icon={faDisplay} size="2x" />
-              <h4 className="text-xl">Screen:</h4>
+              <h4 className="text-xl">{translations.ticketInfo.screen[lang]}</h4>
             </div>
-            <p className={`text-lg`}>{bookingInfo.showtime.screen.nameEN}</p>
+            <p className={`text-lg`}>{lang === 'en' ? bookingInfo.showtime.screen.nameEN : bookingInfo.showtime.screen.nameAR}</p>
           </div>
 
           <div className='flex justify-between w-full items-center gap-2'>
             <div className='flex items-center gap-2'>
               <FontAwesomeIcon icon={faLocationDot} size="2x" />
-              <h4 className="text-xl">Location:</h4>
+              <h4 className="text-xl">{translations.ticketInfo.location[lang]}</h4>
             </div>
-            <p className={`text-lg`}>{bookingInfo.showtime.cinema.nameEN}</p>
+            <p className={`text-lg`}>{lang === 'en' ? bookingInfo.showtime.cinema.nameEN : bookingInfo.showtime.cinema.nameAR}</p>
           </div>
 
           <div className='flex justify-between w-full items-center gap-2'>
             <div className='flex items-center gap-2'>
               <FontAwesomeIcon icon={faClock} size="2x" />
-              <h4 className="text-xl">Showtime:</h4>
+              <h4 className="text-xl">{translations.ticketInfo.showtime[lang]}</h4>
             </div>
             <p className={`text-lg`}>{new Date(bookingInfo.showtime.startTime).toLocaleString(lang === 'en' ? 'en-GB' : 'ar-EG')}</p>
+          </div>
+
+          <div className='flex justify-between w-full items-center gap-2'>
+            <div className='flex items-center gap-2'>
+              <FontAwesomeIcon icon={faMoneyBill} size="2x" />
+              <h4 className="text-xl">{translations.ticketInfo.finalPrice[lang]}</h4>
+            </div>
+            <p className={`text-lg`}>{lang === 'en' ? `${bookingInfo.price} EGP` : `${bookingInfo.price} جنيه `}</p>
           </div>
         </div>
       </div>)}

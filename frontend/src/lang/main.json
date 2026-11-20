@@ -352,5 +352,57 @@
             "en": "You have a pending booking! Click here to continue.",
             "ar": "لديك حجز معلق! انقر هنا للمتابعة."
         }
+    },
+    "ticketInfo": {
+        "title":
+        {
+            "en": "Ticket Info",
+            "ar": "معلومات التذكرة"
+        },
+        "showtime":
+        {
+            "en": "Showtime:",
+            "ar": "موعد العرض:"
+        },
+        "finalPrice":
+        {
+            "en": "Final Price:",
+            "ar": "السعر النهائي:"
+        },
+        "seat1":
+        {
+            "en": "Seat:",
+            "ar": "المقعد:"
+        },
+        "seat2":
+        {
+            "en": "Seats:",
+            "ar": "المقاعد:"
+        },
+        "status":
+        {
+            "en": "Status:",
+            "ar": "الحالة:"
+        },
+        "movie":
+        {
+            "en": "Movie:",
+            "ar": "الفيلم:"
+        },
+        "location":
+        {
+            "en": "Location:",
+            "ar": "الموقع:"
+        },
+        "screen":
+        {
+            "en": "Screen:",
+            "ar": "الشاشة:"
+        },
+        "cancelBooking":
+        {
+            "en": "Cancel Booking",
+            "ar": "إلغاء الحجز"
+        }
     }
 }

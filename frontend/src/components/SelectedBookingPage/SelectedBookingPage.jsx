@@ -128,31 +128,53 @@ export default function SelectedBookingPage() {
       {error && <ErrorElement />}
       {bookingInfo && (<div className={`w-full p-8 gap-8 grid grid-cols-1 ${bookingInfo.status === "confirmed" ? "lg:grid-cols-2" : "lg:grid-cols-1"}`}>
         {bookingInfo.status === "confirmed" && (<div className='w-full justify-center items-center flex flex-col gap-4'>
-          <ReactQRCode value={bookingInfo.code} background="white"
-            dataModulesSettings={{
-              // style: "rounded"
-            }}
-            finderPatternOuterSettings={{
-              style: "outpoint-lg"
-            }}
-            finderPatternInnerSettings={{
-              style: "rounded"
-            }}
-            imageSettings={{
-              src: bookingInfo.showtime.cinema.imageURL,
-              width: 60,
-              height: 60,
-              excavate: true,
-              opacity: 1,
-            }}
-            frameSettings={{
-              style: "ticket",
-              color: "#3282b8",
-              text: bookingInfo.code,
-              fontFamily: "Poppins",
-            }}
-            size={256}
-          />
+          {/* Mobile / < lg (256px) */}
+          <div className="block lg:hidden">
+            <ReactQRCode
+              value={bookingInfo.code}
+              background="white"
+              finderPatternOuterSettings={{ style: "outpoint-lg" }}
+              finderPatternInnerSettings={{ style: "rounded" }}
+              imageSettings={{
+                src: bookingInfo.showtime.cinema.imageURL,
+                width: 60,
+                height: 60,
+                excavate: true,
+                opacity: 1,
+              }}
+              frameSettings={{
+                style: "ticket",
+                color: "#3282b8",
+                text: bookingInfo.code,
+                fontFamily: "Poppins",
+              }}
+              size={256}
+            />
+          </div>
+
+          {/* Desktop / lg+ (384px) */}
+          <div className="hidden lg:block">
+            <ReactQRCode
+              value={bookingInfo.code}
+              background="white"
+              finderPatternOuterSettings={{ style: "outpoint-lg" }}
+              finderPatternInnerSettings={{ style: "rounded" }}
+              imageSettings={{
+                src: bookingInfo.showtime.cinema.imageURL,
+                width: 84,
+                height: 84,
+                excavate: true,
+                opacity: 1,
+              }}
+              frameSettings={{
+                style: "ticket",
+                color: "#3282b8",
+                text: bookingInfo.code,
+                fontFamily: "Poppins",
+              }}
+              size={384}
+            />
+          </div>
         </div>)}
         <div className='bg-tertiary p-8 rounded-2xl flex flex-col justify-start items-center lg:items-start gap-4 w-full'>
           <h4 className="text-3xl font-bold text-center w-full">{translations.ticketInfo.title[lang]}</h4>
@@ -174,7 +196,7 @@ export default function SelectedBookingPage() {
             </div>
             <p className={`text-lg p-2 font-bold rounded-full ${bookStatus[bookingInfo.status].color}`}>{bookStatus[bookingInfo.status][lang]}</p>
           </div>
-          
+
           <div className='flex flex-col lg:flex-row lg:justify-between w-full items-center gap-2'>
             <div className='flex items-center gap-2'>
               <FontAwesomeIcon icon={faTicket} size="2x" />

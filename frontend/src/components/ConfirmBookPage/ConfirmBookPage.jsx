@@ -610,6 +610,11 @@ export default function ConfirmBookPage() {
       setLoading(false);
       setError(false);
       setSteps(4); // Move to confirmation step
+      
+      // 5 seconds later, redirect to ticket page
+      setTimeout(() => {
+        navigateTo('/account/bookings/' + bookingId);
+      }, 5000);
     }
   };
 

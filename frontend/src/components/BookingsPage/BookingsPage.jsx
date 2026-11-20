@@ -96,7 +96,7 @@ export default function BookingsPage() {
             </div>
             <div className='flex flex-row justify-start items-center gap-4'>
               <FontAwesomeIcon icon={faClock} className='text-2xl' />
-              <p className="font-bold">{new Date(booking.showtime.startTime).toLocaleString(lang === 'en' ? 'en-UK' : 'ar-EG')}</p>
+              <p className="font-bold">{new Date(booking.showtime.startTime).toLocaleString(lang === 'en' ? 'en-GB' : 'ar-EG')}</p>
             </div>
             <p className={`absolute ${lang === 'en' ? 'right-2' : 'left-2'} top-2 ${bookStatus[booking.status].color} p-2 rounded-full uppercase`}>{bookStatus[booking.status][lang]}</p>
           </Link>

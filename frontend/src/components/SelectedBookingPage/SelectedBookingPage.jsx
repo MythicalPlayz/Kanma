@@ -85,8 +85,44 @@ export default function SelectedBookingPage() {
   }, [accessToken, bookingId]);
 
 
+  const handleCancelBooking = async () => {
+    // first use the builtin confirm dialog to ask the user if they are sure they want to cancel the booking
+    const confirmCancel = window.confirm("Are you sure you want to cancel this booking? This action cannot be undone.");
+    if (!confirmCancel) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(false);
+      const response = await fetch(`http://localhost:4000/api/bookings/cancel/`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ bookingId: bookingId }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to cancel booking');
+      }
+      console.log('Booking cancelled:', data);
+      alert('Booking cancelled successfully');
+
+      // refresh the booking info to reflect the cancelled status
+      fetchBookingInfo();
+    } catch (error) {
+      console.error('Error cancelling booking:', error);
+      setError(true);
+    }
+    finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <div className="w-full min-h-screen flex flex-col items-start justify-start gap-8 p-8">
+    <div className="w-full min-h-screen flex flex-col items-start justify-start gap-8 lg:p-8">
       <h3 className="text-3xl font-bold">{translations.ticketInfo.title[lang]}</h3>
       {loading && <LoadingElement />}
       {error && <ErrorElement />}
@@ -118,20 +154,20 @@ export default function SelectedBookingPage() {
             size={256}
           />
         </div>)}
-        <div className='bg-tertiary p-8 rounded-2xl flex flex-col justify-start items-start gap-4 w-full'>
+        <div className='bg-tertiary p-8 rounded-2xl flex flex-col justify-start items-center lg:items-start gap-4 w-full'>
           <h4 className="text-3xl font-bold text-center w-full">{translations.ticketInfo.title[lang]}</h4>
           <div className='flex items-center gap-2'>
             <FontAwesomeIcon icon={faCouch} size="2x" />
             <h4 className="text-xl">{bookingInfo.seats.length === 1 ? translations.ticketInfo.seat1[lang] : translations.ticketInfo.seat2[lang]}</h4>
           </div>
 
-          <div className="flex flex-row gap-4 w-full flex-wrap">
+          <div className="flex flex-row lg:justify-start justify-center gap-4 w-full flex-wrap">
             {bookingInfo.seats.map((seat, index) => (
               <p key={index} className="text-lg bg-secondary text-white p-2 font-bold rounded">{seat.seatCode}</p>
             ))}
           </div>
 
-          <div className='flex justify-between w-full items-center gap-2'>
+          <div className='flex flex-col lg:flex-row lg:justify-between w-full items-center gap-2'>
             <div className='flex items-center gap-2'>
               <FontAwesomeIcon icon={faCircleInfo} size="2x" />
               <h4 className="text-xl">{translations.ticketInfo.status[lang]}</h4>
@@ -139,7 +175,7 @@ export default function SelectedBookingPage() {
             <p className={`text-lg p-2 font-bold rounded-full ${bookStatus[bookingInfo.status].color}`}>{bookStatus[bookingInfo.status][lang]}</p>
           </div>
           
-          <div className='flex justify-between w-full items-center gap-2'>
+          <div className='flex flex-col lg:flex-row lg:justify-between w-full items-center gap-2'>
             <div className='flex items-center gap-2'>
               <FontAwesomeIcon icon={faTicket} size="2x" />
               <h4 className="text-xl">{translations.ticketInfo.movie[lang]}</h4>
@@ -147,7 +183,7 @@ export default function SelectedBookingPage() {
             <p className={`text-lg`}>{lang === 'en' ? bookingInfo.showtime.movie.titleEN : bookingInfo.showtime.movie.titleAR}</p>
           </div>
 
-          <div className='flex justify-between w-full items-center gap-2'>
+          <div className='flex flex-col lg:flex-row lg:justify-between w-full items-center gap-2'>
             <div className='flex items-center gap-2'>
               <FontAwesomeIcon icon={faDisplay} size="2x" />
               <h4 className="text-xl">{translations.ticketInfo.screen[lang]}</h4>
@@ -155,7 +191,7 @@ export default function SelectedBookingPage() {
             <p className={`text-lg`}>{lang === 'en' ? bookingInfo.showtime.screen.nameEN : bookingInfo.showtime.screen.nameAR}</p>
           </div>
 
-          <div className='flex justify-between w-full items-center gap-2'>
+          <div className='flex flex-col lg:flex-row lg:justify-between w-full items-center gap-2'>
             <div className='flex items-center gap-2'>
               <FontAwesomeIcon icon={faLocationDot} size="2x" />
               <h4 className="text-xl">{translations.ticketInfo.location[lang]}</h4>
@@ -163,7 +199,7 @@ export default function SelectedBookingPage() {
             <p className={`text-lg`}>{lang === 'en' ? bookingInfo.showtime.cinema.nameEN : bookingInfo.showtime.cinema.nameAR}</p>
           </div>
 
-          <div className='flex justify-between w-full items-center gap-2'>
+          <div className='flex flex-col lg:flex-row lg:justify-between w-full items-center gap-2'>
             <div className='flex items-center gap-2'>
               <FontAwesomeIcon icon={faClock} size="2x" />
               <h4 className="text-xl">{translations.ticketInfo.showtime[lang]}</h4>
@@ -171,13 +207,18 @@ export default function SelectedBookingPage() {
             <p className={`text-lg`}>{new Date(bookingInfo.showtime.startTime).toLocaleString(lang === 'en' ? 'en-GB' : 'ar-EG')}</p>
           </div>
 
-          <div className='flex justify-between w-full items-center gap-2'>
+          <div className='flex flex-col lg:flex-row lg:justify-between w-full items-center gap-2'>
             <div className='flex items-center gap-2'>
               <FontAwesomeIcon icon={faMoneyBill} size="2x" />
               <h4 className="text-xl">{translations.ticketInfo.finalPrice[lang]}</h4>
             </div>
             <p className={`text-lg`}>{lang === 'en' ? `${bookingInfo.price} EGP` : `${bookingInfo.price} جنيه `}</p>
           </div>
+          {bookingInfo.status === "confirmed" && (new Date(bookingInfo.showtime.startTime) - new Date()) > 30 * 60 * 1000 && (<>
+            <button className="bg-red-500 hover:bg-red-700 hover:cursor-pointer transition-all text-white font-bold py-2 px-4 rounded" onClick={handleCancelBooking}>
+              {translations.ticketInfo.cancelBooking[lang]}
+            </button>
+          </>)}
         </div>
       </div>)}
     </div>

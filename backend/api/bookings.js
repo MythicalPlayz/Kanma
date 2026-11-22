@@ -6,6 +6,7 @@ import SeatShowTime from "../models/SeatShowTime.js";
 import SeatType from "../models/SeatType.js";
 import crypto from "crypto";
 import { decryptData, encryptData, encryptDataWithKey, getPrivateKeyObject, getPublicKey, getPublicKeyObject } from "../auth/auth.js";
+import { getIO } from "../socket.js";
 
 const router = express.Router();
 
@@ -70,7 +71,7 @@ router.post("/book/", async (req, res) => {
             decryptedData = decryptData(encryptedData);
         }
 
-        const { showtimeId, seats } = raw ? req.body : decryptedData;
+        const { showtimeId, seats, socketId } = raw ? req.body : decryptedData;
 
         // seats would be an array containing each two values: seatCode and seatType, e.g. [{seatCode: "A1", seatType: "VIP"}, {seatCode: "A2", seatType: "VIP"}]
 
@@ -166,13 +167,34 @@ router.post("/book/", async (req, res) => {
 
         const savedBooking = await newBooking.save();
 
-        SeatShowTime.insertMany(seats.map(seat => ({
-            bookingId: newBooking._id,
-            showtimeId: showtimeId,
-            seatCode: seat.seatCode,
-            seatType: seat.seatType,
-            accountId: userId
-        })));
+        const insertedSeats = await SeatShowTime.insertMany(
+            seats.map((seat) => ({
+                bookingId: newBooking._id,
+                showtimeId: seat.showtimeId ?? showtimeId,
+                seatCode: seat.seatCode,
+                seatType: seat.seatType,
+                accountId: userId,
+            }))
+        );
+
+        const seatsByShowtime = {};
+        for (const doc of insertedSeats) {
+            const key = String(doc.showtimeId);
+            if (!seatsByShowtime[key]) {
+                seatsByShowtime[key] = [];
+            }
+            seatsByShowtime[key].push(doc.seatCode);
+        }
+
+        const io = getIO();
+        for (const [targetShowtimeId, seatCodes] of Object.entries(seatsByShowtime)) {
+            io.to(`showtime_${targetShowtimeId}`).emit("seats_updated", {
+                action: "book",
+                showtimeId: targetShowtimeId,
+                seats: seatCodes,
+                socketId: socketId // Include the socket ID if provided
+            });
+        }
 
         // Get the id of new booking and send it to the frontend along with the payCode
         const bookingId = savedBooking._id;
@@ -316,7 +338,29 @@ router.delete("/cancel/", async (req, res) => {
         booking.status = 'cancelled';
         await booking.save();
         // Delete associated SeatShowTime entries
-        await SeatShowTime.deleteMany({ bookingId: bookingId });
+        const seatsToRelease = await SeatShowTime.find({ bookingId });
+
+        if (seatsToRelease.length > 0) {
+            await SeatShowTime.deleteMany({ bookingId });
+
+            const seatsByShowtime = {};
+            for (const doc of seatsToRelease) {
+                const key = String(doc.showtimeId);
+                if (!seatsByShowtime[key]) {
+                    seatsByShowtime[key] = [];
+                }
+                seatsByShowtime[key].push(doc.seatCode);
+            }
+
+            const io = getIO();
+            for (const [showtimeId, seatCodes] of Object.entries(seatsByShowtime)) {
+                io.to(`showtime_${showtimeId}`).emit("seats_updated", {
+                    action: "release",
+                    showtimeId,
+                    seats: seatCodes,
+                });
+            }
+        }
 
         res.json({ message: 'Booking deleted successfully' });
     } catch (error) {
@@ -369,4 +413,4 @@ router.get('/active/', async (req, res) => {
     }
 });
 
-    export default router;
+export default router;

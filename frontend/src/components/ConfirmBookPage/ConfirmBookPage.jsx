@@ -9,6 +9,7 @@ import LoadingElement from '../LoadingElement/LoadingElement';
 import ErrorElement from '../ErrorElement/ErrorElement';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { socket } from '../../socket.js';
 
 export default function ConfirmBookPage() {
   const { showtimeId } = useParams();
@@ -23,6 +24,7 @@ export default function ConfirmBookPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [bookedSeats, setBookedSeats] = useState([]);
   const [seatTypeDetails, setSeatTypeDetails] = useState({});
   const [seatPrices, setSeatPrices] = useState({});
   const [bankPublicKey, setBankPublicKey] = useState(null);
@@ -94,15 +96,7 @@ export default function ConfirmBookPage() {
 
       console.log('Fetched booked seats:', data);
       // Mark booked seats as unavailable
-      for (const bookedSeat of data) {
-        const seatButton = document.getElementById(bookedSeat.seatCode);
-        if (seatButton) {
-          seatButton.disabled = true;
-          seatButton.classList.add('bg-gray-500', 'hover:cursor-not-allowed');
-          seatButton.classList.remove('bg-blue-500', 'bg-green-500', 'hover:bg-amber-500');
-          seatButton.innerText = `X`;
-        }
-      }
+      setBookedSeats(data);
     } catch (error) {
       console.error('Error fetching booked seats:', error);
       if (error.response && error.response.status === 401) {
@@ -144,10 +138,10 @@ export default function ConfirmBookPage() {
       const createdAt = new Date(data.createdAt);
       const now = new Date();
       const timeElapsed = Math.floor((now - createdAt) / 1000);
-      
+
 
       setTimer(600 - timeElapsed); // 10 minutes countdown
-      setSeatPrices({total: data.price, tickets: data.tickets});
+      setSeatPrices({ total: data.price, tickets: data.tickets });
 
 
     } catch (error) {
@@ -312,7 +306,8 @@ export default function ConfirmBookPage() {
     const bookingData = {
       showtimeId: showtimeId,
       seats: selectedSeats,
-      raw: false
+      raw: false,
+      socketId: socket.id
     };
 
     const encryptedBookingData = await encryptDataWithKey(bookingData, serverPublicKey);
@@ -611,13 +606,74 @@ export default function ConfirmBookPage() {
       setLoading(false);
       setError(false);
       setSteps(4); // Move to confirmation step
-      
+
       // 5 seconds later, redirect to ticket page
       setTimeout(() => {
         navigateTo('/account/bookings/' + bookingId);
       }, 5000);
     }
   };
+
+  useEffect(() => {
+    // server joins room `showtime_${showtimeId}` -> "showtime_123"
+
+    const onConnect = () => {
+      console.log("Socket connected! ID:", socket.id);
+      socket.emit("join_showtime_room", showtimeId);
+    };
+
+    const onSeatsUpdated = (data) => {
+
+      console.log("Raw seats_updated payload:", data);
+
+      const { action, showtimeId: eventShowtimeId, seats, socketId } = data || {};
+      if (String(eventShowtimeId) !== String(showtimeId)) return;
+
+      // Check if the event is from the current user
+      const isSelf = Boolean(socketId && socket.id && socketId === socket.id);
+      if (isSelf) {
+        console.log("Ignoring seats_updated event from self:", data);
+        return;
+      }
+
+      if (action === "book") {
+        console.log(`Broadcast: seats BOOKED for showtime ${eventShowtimeId}:`, seats);
+
+        // get the filtered selectedSeats that are in the seats array
+        const bookedSelectedSeats = selectedSeats.filter(seat => seats.includes(seat.seatCode));
+
+        if (bookedSelectedSeats.length > 0) {
+          console.log("Some of your selected seats have been booked by another user:", bookedSelectedSeats);
+        }
+
+        // Remove any of these seats from the selectedSeats state if they were selected
+        setSelectedSeats(prevSelectedSeats => prevSelectedSeats.filter(seat => !seats.includes(seat.seatCode)));
+        setBookedSeats(prevBookedSeats => [...prevBookedSeats, ...seats.map(seatCode => ({ seatCode }))]);
+    
+      } else if (action === "release") {
+        console.log(`Broadcast: seats RELEASED for showtime ${eventShowtimeId}:`, seats);
+
+        setBookedSeats(prevBookedSeats => prevBookedSeats.filter(seat => !seats.includes(seat.seatCode)));
+
+      } else {
+        console.log("Broadcast: unknown action:", action, data);
+      }
+    };
+
+    socket.on("connect", onConnect);
+    socket.on("seats_updated", onSeatsUpdated);
+
+    socket.connect();
+
+    return () => {
+      socket.emit("leave_showtime_room", showtimeId);
+      socket.off("connect", onConnect);
+      socket.off("seats_updated", onSeatsUpdated);
+      socket.disconnect();
+    };
+  }, []);
+
+
 
   // 1 = Booking Details, 2 = Payment, 3 = OTP, 4 = Confirmation
   return (
@@ -651,10 +707,25 @@ export default function ConfirmBookPage() {
                         const seatClass = seatTypeDetails[seatType]?.color || 'bg-gray-500';
                         const isSelected = selectedSeats.some(seat => seat.seatCode === seatCode);
                         const seatClassName = isSelected ? 'bg-green-500' : seatClass;
+                        const isBooked = bookedSeats.some(seat => seat.seatCode === seatCode);
 
                         return (
-                          <button key={seatCode} id={seatCode} className={`p-4 w-8 flex justify-center items-center text-white text-sm ${isSelected ? 'bg-yellow-600' : seatClassName} cursor-pointer hover:bg-amber-500`} onClick={() => handleSeatClick(seatCode, seatType)}>
-                            {rowLetter}{seatNumber}
+                          <button
+                            key={seatCode}
+                            id={seatCode}
+                            type="button"
+                            disabled={isBooked}
+                            className={`p-4 w-8 flex justify-center items-center text-white text-sm ${isBooked
+                                ? "bg-gray-500 cursor-not-allowed opacity-75"
+                                : isSelected
+                                  ? "bg-yellow-600 cursor-pointer hover:bg-amber-500"
+                                  : `${seatClassName} cursor-pointer hover:bg-amber-500`
+                              }`}
+                            onClick={() => {
+                              if (!isBooked) handleSeatClick(seatCode, seatType);
+                            }}
+                          >
+                            {isBooked ? "X" : seatCode}
                           </button>
                         );
                       })}

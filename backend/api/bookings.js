@@ -201,12 +201,37 @@ router.post("/book/", async (req, res) => {
         res.status(201).json({ timeLeft: 600, userPayCode: encryptedcodes.userPayCode, bookingId: bookingId });
 
         const TIMEOUT_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
+
         setTimeout(async () => {
             const booking = await Booking.findById(savedBooking._id);
-            if (booking && booking.status === 'pending') {
-                booking.status = 'expired';
+            if (booking && booking.status === "pending") {
+                booking.status = "expired";
                 await booking.save();
+
+                const seatsToRelease = await SeatShowTime.find({ bookingId: savedBooking._id });
                 await SeatShowTime.deleteMany({ bookingId: savedBooking._id });
+
+                if (seatsToRelease.length > 0) {
+                    const seatsByShowtime = {};
+                    for (const doc of seatsToRelease) {
+                        const key = String(doc.showtimeId);
+                        if (!seatsByShowtime[key]) {
+                            seatsByShowtime[key] = [];
+                        }
+                        seatsByShowtime[key].push(doc.seatCode);
+                    }
+
+                    const io = getIO();
+                    for (const [showtimeId, seatCodes] of Object.entries(seatsByShowtime)) {
+                        io.to(`showtime_${showtimeId}`).emit("seats_updated", {
+                            action: "release",
+                            showtimeId,
+                            seats: seatCodes,
+                            socketId: socketId,
+                        });
+                    }
+                }
+
                 console.log(`Booking ${savedBooking._id} has been automatically expired due to timeout.`);
             }
         }, TIMEOUT_DURATION);

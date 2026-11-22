@@ -44,7 +44,7 @@ export default function VerifyComponent() {
 
   const handleVerify = async (code) => {
     try {
-      const response = await fetch('http://localhost:4000/api/account/verify', {
+      const response = await fetch('/api/account/verify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

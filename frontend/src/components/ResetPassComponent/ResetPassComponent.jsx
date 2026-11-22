@@ -37,7 +37,7 @@ export default function ResetPassComponent() {
       return;
     }
     try {
-      const response = await fetch('http://localhost:4000/api/account/reset-password', {
+      const response = await fetch('/api/account/reset-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

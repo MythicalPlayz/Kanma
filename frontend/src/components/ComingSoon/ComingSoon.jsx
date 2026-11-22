@@ -22,7 +22,7 @@ export default function ComingSoon({ showAll = false, loadedMovies = [] }) {
     if (movies.length > 0) return; // If movies are already loaded, do not fetch again
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:4000/api/movies/comingsoon');
+      const response = await fetch('/api/movies/comingsoon');
       const data = await response.json();
       setMovies(data);
       console.log('Fetched movies:', data);

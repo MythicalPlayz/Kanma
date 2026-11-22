@@ -37,7 +37,7 @@ export default function CinemasPage() {
   const fetchCinemas = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:4000/api/cinemas');
+      const response = await fetch('/api/cinemas');
       const data = await response.json();
       setCinemas(data);
       console.log('Fetched cinemas:', data);

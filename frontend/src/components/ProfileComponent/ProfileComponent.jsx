@@ -27,7 +27,7 @@ export default function ProfileComponent() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:4000/api/account/me', {
+      const response = await fetch('/api/account/me', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ export default function ProfileComponent() {
   };
 
   const logout = async () => {
-    const response = await fetch('http://localhost:4000/api/account/logout', {
+    const response = await fetch('/api/account/logout', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

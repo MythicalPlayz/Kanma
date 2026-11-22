@@ -37,7 +37,7 @@ export default function AccountPage() {
 
 
   const checkIfValidToken = async () => {
-    const res = await fetch('http://localhost:4000/api/account/refresh', {
+    const res = await fetch('/api/account/refresh', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -19,7 +19,7 @@ export default function BookingsPage() {
     try {
       setLoading(true);
       setError(false);
-      const response = await fetch('http://localhost:4000/api/bookings', {
+      const response = await fetch('/api/bookings', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

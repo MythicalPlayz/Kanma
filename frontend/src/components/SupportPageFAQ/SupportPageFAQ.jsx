@@ -17,7 +17,7 @@ export default function SupportPageFaq() {
     const featchSupportData = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:4000/api/support/faq');
+        const response = await fetch('/api/support/faq');
         const data = await response.json();
         setFaqData(data);
         console.log('Fetched FAQ data:', data);

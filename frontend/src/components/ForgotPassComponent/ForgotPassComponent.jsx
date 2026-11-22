@@ -28,7 +28,7 @@ export default function ForgotPassComponent() {
   const handleEmailCheck = async (email) => {
     console.log('Checking email for password reset:', email);
     try {
-      const response = await fetch('http://localhost:4000/api/account/forgot-password', {
+      const response = await fetch('/api/account/forgot-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

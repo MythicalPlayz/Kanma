@@ -46,7 +46,7 @@ export default function ConfirmBookPage() {
     try {
       setLoading(true);
       setError(false);
-      const response = await fetch(`http://localhost:4000/api/screens/showtime?showtimeId=${showtimeId}`, {
+      const response = await fetch(`/api/screens/showtime?showtimeId=${showtimeId}`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`
         },
@@ -82,7 +82,7 @@ export default function ConfirmBookPage() {
     try {
       setLoading(true);
       setError(false);
-      const response = await fetch(`http://localhost:4000/api/showtimes/bookedseats?showtimeId=${showtimeId}`, {
+      const response = await fetch(`/api/showtimes/bookedseats?showtimeId=${showtimeId}`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`
         },
@@ -125,7 +125,7 @@ export default function ConfirmBookPage() {
     try {
       setLoading(true);
       setError(false);
-      const response = await fetch(`http://localhost:4000/api/bookings/active`, {
+      const response = await fetch(`/api/bookings/active`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           'Content-Type': 'application/json'
@@ -225,10 +225,10 @@ export default function ConfirmBookPage() {
 
   const setPublicKeys = async () => {
     try {
-      const response = await fetch('http://localhost:4000/api/auth/key');
+      const response = await fetch('/api/auth/key');
       const data = await response.json();
       setServerPublicKey(data.publicKey);
-      const response2 = await fetch('http://localhost:4000/bank/public-key');
+      const response2 = await fetch('/bank/public-key');
       const data2 = await response2.json();
       setBankPublicKey(data2.publicKey);
       console.log('Fetched public keys:', data.publicKey, data2.publicKey);
@@ -322,7 +322,7 @@ export default function ConfirmBookPage() {
 
     // Send booking data to the backend to create a pending booking
     try {
-      const response = await fetch('http://localhost:4000/api/bookings/book', {
+      const response = await fetch('/api/bookings/book', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -483,7 +483,7 @@ export default function ConfirmBookPage() {
     // TODO: Send the encrypted OTP data to the bank for verification
     setLoading(true);
 
-    const response = await fetch('http://localhost:4000/bank/otp', {
+    const response = await fetch('/bank/otp', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -545,6 +545,7 @@ export default function ConfirmBookPage() {
     };
 
     // Encrypt the card data with the bank's public key
+    console.log('Encrypting payment data with bank public key:', bankPublicKey, 'Payment Data:', paymentData);
     const encryptPaymentData = await encryptDataWithKey(paymentData, bankPublicKey);
     console.log('Encrypted payment data:', encryptPaymentData);
 
@@ -552,7 +553,7 @@ export default function ConfirmBookPage() {
     // now we can post
     setLoading(true);
     setError(false);
-    const response = await fetch('http://localhost:4000/bank/payment', {
+    const response = await fetch('/bank/payment', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -587,7 +588,7 @@ export default function ConfirmBookPage() {
     try {
       setLoading(true);
       setError(false);
-      const response = await fetch(`http://localhost:4000/api/bookings/booking?bookingId=${bookingId}`, {
+      const response = await fetch(`/api/bookings/booking?bookingId=${bookingId}`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`
         },

@@ -55,7 +55,7 @@ export default function SelectedBookingPage() {
 
 
 
-      const response = await fetch(`http://localhost:4000/api/bookings/booking?bookingId=${bookingId}`, {
+      const response = await fetch(`/api/bookings/booking?bookingId=${bookingId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ export default function SelectedBookingPage() {
     try {
       setLoading(true);
       setError(false);
-      const response = await fetch(`http://localhost:4000/api/bookings/cancel/`, {
+      const response = await fetch(`/api/bookings/cancel/`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

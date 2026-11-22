@@ -247,7 +247,7 @@ export default function SnacksPage() {
   const fetchSnacks = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:4000/api/snacks');
+      const response = await fetch('/api/snacks');
       const data = await response.json();
       setSnacks(data);
       console.log('Fetched snacks:', data);

@@ -12,7 +12,7 @@ export function UserProvider({ children }) {
     // if there is a token we try to refresh the token if success then we can continue otherwise we will logout the user
     const RefreshToken = async () => {
         try {
-            const response = await fetch('http://localhost:4000/api/account/refresh', {
+            const response = await fetch('/api/account/refresh', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

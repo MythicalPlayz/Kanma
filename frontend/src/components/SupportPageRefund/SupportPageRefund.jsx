@@ -20,7 +20,7 @@ export default function SupportPageRefund() {
   const featchSupportData = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:4000/api/support/refund');
+      const response = await fetch('/api/support/refund');
       const data = await response.json();
       setRefundData(data);
       setLoadedData(true);

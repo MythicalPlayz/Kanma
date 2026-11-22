@@ -15,7 +15,7 @@ export default function ActiveBookingRedirect() {
 
   const fetchActiveBooking = async () => {
     try {
-      const response = await fetch('http://localhost:4000/api/bookings/active', {
+      const response = await fetch('/api/bookings/active', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

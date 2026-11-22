@@ -33,7 +33,7 @@ export default function MovieDetails() {
   const fetchMovie = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:4000/api/movies/movie/' + id);
+      const response = await fetch('/api/movies/movie/' + id);
       const data = await response.json();
       setMovieData(data);
       console.log('Fetched movie:', data);

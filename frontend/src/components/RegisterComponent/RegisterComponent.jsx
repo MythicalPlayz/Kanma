@@ -31,7 +31,7 @@ export default function RegisterComponent() {
 
   const handleRegister = async (email, password, FName, LName, telephone) => {
     try {
-      const response = await fetch('http://localhost:4000/api/account/register', {
+      const response = await fetch('/api/account/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

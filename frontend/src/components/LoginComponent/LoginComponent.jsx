@@ -28,7 +28,7 @@ export default function LoginComponent() {
 
   const handleLogin = async (email, password) => {
     try {
-      const response = await fetch('http://localhost:4000/api/account/login', {
+      const response = await fetch('/api/account/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

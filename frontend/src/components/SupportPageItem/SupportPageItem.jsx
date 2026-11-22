@@ -23,7 +23,7 @@ export default function SupportPageItem({item}) {
     const featchSupportData = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:4000/api/support/' + itemToAPIMap[item]);
+        const response = await fetch('/api/support/' + itemToAPIMap[item]);
         const data = await response.json();
         setItemData(data);
         console.log('Fetched policy data:', data);

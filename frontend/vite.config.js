@@ -1,7 +1,15 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
+import basicSsl from '@vitejs/plugin-basic-ssl';
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(),basicSsl()],
+  server: {
+    https: true,
+    proxy: {
+      '/api': 'http://localhost:4000',
+      '/bank': 'http://localhost:4000',
+    },
+  },
 });

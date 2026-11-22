@@ -44,7 +44,7 @@ export default function BookPage() {
     try {
       setLoading(true);
       setError(false);
-      const response = await fetch(`http://localhost:4000/api/showtimes?movieId=${movieId}&cinemaId=${cinemaId}&date=${date}`, {
+      const response = await fetch(`/api/showtimes?movieId=${movieId}&cinemaId=${cinemaId}&date=${date}`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`
         }

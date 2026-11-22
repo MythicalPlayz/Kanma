@@ -23,7 +23,7 @@ export default function Home() {
   const fetchMovies = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:4000/api/movies/home');
+      const response = await fetch('/api/movies/home');
       const data = await response.json();
       setmovies(data);
       console.log('Fetched movies:', data);
@@ -37,7 +37,7 @@ export default function Home() {
   const fetchPosters = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:4000/api/posters');
+      const response = await fetch('/api/posters');
       const data = await response.json();
       setPosters(data);
     } catch (error) {

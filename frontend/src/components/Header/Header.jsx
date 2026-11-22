@@ -43,32 +43,32 @@ export default function Header() {
         </button>
       </div>
       <div className={`flex flex-col lg:flex-row w-full lg:w-auto justify-center items-center gap-4 lg:gap-8 transition-all duration-500 ease-in-out lg:max-h-none lg:overflow-visible ${menuOpen ? 'max-h-250 overflow-hidden' : 'max-h-0 overflow-hidden'}`}>
-        <button className='flex items-center gap-0.5 justify-center flex-nowrap p-2 cursor-pointer' onClick={() => setDarkMode(darkMode === 0 ? 1 : 0)}>
+        <button className='flex items-center gap-0.5 justify-center flex-nowrap p-2 cursor-pointer' onClick={() => {setDarkMode(darkMode === 0 ? 1 : 0); setMenuOpen(false)}}>
           <FontAwesomeIcon icon={(darkMode === 0 ? faMoon : faSun)}></FontAwesomeIcon>
           {/* <h3 className='text-xl'>{darkMode === 0 ? translations.darkMode[lang] : translations.lightMode[lang]}</h3> */}
         </button>
-        <button className='flex items-center gap-0.5 justify-center flex-nowrap p-2 cursor-pointer' onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}>
+        <button className='flex items-center gap-0.5 justify-center flex-nowrap p-2 cursor-pointer' onClick={() => {setLang(lang === 'en' ? 'ar' : 'en'); setMenuOpen(false)}}>
           {/* <FontAwesomeIcon icon={faGlobe}></FontAwesomeIcon> */}
           <img src={lang === 'en' ? FLAG_EN : FLAG_AR} alt="Language Flag" className="w-6 h-6" />
           {/* <h3 className='text-xl'>{lang === 'en' ? '🇬🇧' : '🇪🇬'}</h3> */}
         </button>
-        <Link to="/movies" className='flex items-center gap-0.5 justify-center flex-nowrap p-2'>
+        <Link to="/movies" className='flex items-center gap-0.5 justify-center flex-nowrap p-2' onClick={() => setMenuOpen(false)}>
           <FontAwesomeIcon icon={faFilm}></FontAwesomeIcon>
           <h3 className='text-xl'>{translations.movies[lang]}</h3>
         </Link>
-        <Link to="/cinemas" className='flex items-center gap-0.5 justify-center flex-nowrap p-2'>
+        <Link to="/cinemas" className='flex items-center gap-0.5 justify-center flex-nowrap p-2' onClick={() => setMenuOpen(false)}>
           <FontAwesomeIcon icon={faLocationDot}></FontAwesomeIcon>
           <h3 className='text-xl'>{translations.cinemas[lang]}</h3>
         </Link>
-        <Link to="/snacks" className='flex items-center gap-0.5 justify-center flex-nowrap p-2'>
+        <Link to="/snacks" className='flex items-center gap-0.5 justify-center flex-nowrap p-2' onClick={() => setMenuOpen(false)}>
           <FontAwesomeIcon icon={faBowlFood}></FontAwesomeIcon>
           <h3 className='text-xl'>{translations.snacks[lang]}</h3>
         </Link>
-        <Link to="/support" className='flex items-center gap-0.5 justify-center flex-nowrap p-2'>
+        <Link to="/support" className='flex items-center gap-0.5 justify-center flex-nowrap p-2' onClick={() => setMenuOpen(false)}>
           <FontAwesomeIcon icon={faHeadset}></FontAwesomeIcon>
           <h3 className='text-xl'>{translations.support[lang]}</h3>
         </Link>
-        <Link to="/account" className='flex items-center gap-0.5 justify-center flex-nowrap p-2'>
+        <Link to="/account" className='flex items-center gap-0.5 justify-center flex-nowrap p-2' onClick={() => setMenuOpen(false)}>
           <FontAwesomeIcon icon={faUserAlt}></FontAwesomeIcon>
           <h3 className='text-xl'>{translations.account[lang]}</h3>
         </Link>
